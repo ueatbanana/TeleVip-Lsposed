@@ -16,17 +16,15 @@ A module for modifying Telegram with the following features:
 
 7. Save stories to the gallery, including those that cannot normally be saved.
 
-8. Change name (Note: The name changes only on your device).
+8. Hide Phone Number
 
-9. Hide Phone Number
+9. Hide Online Status
 
-10. Hide Online Status
+10. Prevent Deletion of Secret Media
 
-11. Prevent Deletion of Secret Media
+11. Show Deleted Messages
 
-12. Show Deleted Messages
-
-13. Disable Stories
+12. Disable Stories
 
 There are additional features that are not listed here.
 
