@@ -35,7 +35,7 @@ There are additional features that are not listed here.
 2. Plus 11.9.0.1 (21500)
 3. TG Connect 11.0.1 (1100109)
 4. Nagram 11.9.0 (1209)
-5. Skygram 10.20.6 (40639) TeleVip 1.4.5
+5. Skygram 10.20.6 (40639) TeleVip 1.4.6
 6. iMe 11.9.0 (11090002)
 7. X Plus 11.8.2.1 (57869)
 8. Cherrygram 11.9.0 (58370)
