@@ -21,9 +21,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import com.my.televip.HookInit;
+
+import com.my.televip.StrVip;
 import com.my.televip.Utils;
-import com.my.televip.application.HostApplicationInfo;
 import com.my.televip.base.AbstractMethodHook;
 import com.my.televip.configs.Configs;
 //import com.my.televip.language.Language;
@@ -174,17 +174,6 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
     {
         Class<?> chatMessageCell = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.Cells.ChatMessageCell"), classLoader);
         if (chatMessageCell != null) {
-            /*XposedHelpers.findAndHookMethod(chatMessageCell, AutomationResolver.resolve("ChatMessageCell", "setVisibleOnScreen", AutomationResolver.ResolverType.Method), boolean.class, float.class, float.class, new AbstractMethodHook() {
-                @Override
-                protected void afterMethod(MethodHookParam param) {
-                    if (Configs.isAntiRecall()) {
-                        boolean visible = (boolean) param.args[0];
-                        if (visible)
-                            currentMessageObject = new MessageObject(XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("ChatMessageCell", "currentMessageObject", AutomationResolver.ResolverType.Field)));
-                    }
-                }
-            });*/
-
             XposedHelpers.findAndHookMethod(chatMessageCell, AutomationResolver.resolve("ChatMessageCell", "measureTime", AutomationResolver.ResolverType.Method), AutomationResolver.resolve("org.telegram.messenger.MessageObject"), new AbstractMethodHook() {
                 @Override
                 protected void afterMethod(MethodHookParam param) {
@@ -192,7 +181,7 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                         if (Configs.isAntiRecall()) {
                             currentMessageObject = new MessageObject(XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("ChatMessageCell", "currentMessageObject", AutomationResolver.ResolverType.Field)));
                             lastVisibleTime = System.currentTimeMillis();
-                            String text = Configs.getAntiRecallText().isEmpty() ? (delmsg) : Configs.getAntiRecallText();
+                            String text = Configs.getAntiRecallText().isEmpty() ? (delmsg): Configs.getAntiRecallText();
                             Object msgObj = param.args[0];
                             if (msgObj == null)
                                 return;
@@ -208,6 +197,8 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                                     NekoChatMessageCell cell = new NekoChatMessageCell(param.thisObject);
                                     SpannableStringBuilder time = cell.getCurrentTimeString();
                                     SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
+                                    if (Configs.isAntiRecallTextColorful())
+                                        spannableStringBuilder.setSpan(new ForegroundColorSpan(Color.rgb(Configs.getAntiRecallTextRed(), Configs.getAntiRecallTextGreen(), Configs.getAntiRecallTextBlue())), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                     spannableStringBuilder.append(" ");
                                     time.insert(0, spannableStringBuilder);
                                     cell.setCurrentTimeString(time);
@@ -223,7 +214,9 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                                     if (time == null)
                                         return;
                                     SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
-                                                                        spannableStringBuilder.append(" ");
+                                    if (Configs.isAntiRecallTextColorful())
+                                        spannableStringBuilder.setSpan(new ForegroundColorSpan(Color.rgb(Configs.getAntiRecallTextRed(), Configs.getAntiRecallTextGreen(), Configs.getAntiRecallTextBlue())), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    spannableStringBuilder.append(" ");
                                     time.insert(0, spannableStringBuilder);
                                     cell.setCurrentTimeString(time);
                                     TextPaint paint = Theme.getTextPaint(classLoader);
@@ -312,7 +305,7 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                                             markMessagesDeletedForController(param.thisObject, DeletedMessageInfo.NOT_CHANNEL, messages);
                                         }
 
-                                        if (HookInit.DEBUG_MODE && (item.getClass().equals(TL_updateDeleteMessages) || item.getClass().equals(TL_updateDeleteChannelMessages)))
+                                        if (StrVip.DEBUG_MODE && (item.getClass().equals(TL_updateDeleteMessages) || item.getClass().equals(TL_updateDeleteChannelMessages)))
                                             Utils.log("Protected message! event: " + item.getClass());
                                     }
                                     param.args[0] = newUpdates;

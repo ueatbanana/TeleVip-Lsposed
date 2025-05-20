@@ -22,6 +22,8 @@ public class MainHook extends StrVip implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         // استهداف تطبيق معين لتعديل ANDROID_ID
+        Utils.pkgName = lpparam.packageName;
+
         switch (lpparam.packageName) {
             case "org.telegram.messenger":
             case "org.telegram.messenger.web":

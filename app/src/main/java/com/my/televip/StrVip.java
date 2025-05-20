@@ -71,6 +71,7 @@ public static MediaPlayer mediaPlayer;
 public static String audioUrl;
 public static String hidestore;
 public static String strTelevip="televip";
+public static final boolean DEBUG_MODE=false;
 public static void Strck(Context con){
 isdele=false;
         if (MainHook.getAppLanguage(con).equals("ar")) {
@@ -953,15 +954,10 @@ XposedHelpers.findAndHookMethod(
                 try {
 if (sharedPreferences.contains("shmsdel") && !istru) {
 istru =true;
-            ClassLoader classLoader = lpparam.classLoader;
             
-                NEWAntiRecall.initUI(classLoader);
-             //   if (lpparam.packageName.equals("com.skyGram.bestt")){    
-           //     NEWAntiRecall.initProcessing2(classLoader);
-          //      }else {
-                NEWAntiRecall.initProcessing(classLoader);
-             //   }
-                NEWAntiRecall.init(classLoader);
+                NEWAntiRecall.initUI(lpparam.classLoader);
+                NEWAntiRecall.initProcessing(lpparam.classLoader);
+                NEWAntiRecall.init(lpparam.classLoader);
 }
                 } catch (Exception ex){
                     ErrorShow(ex.getMessage());

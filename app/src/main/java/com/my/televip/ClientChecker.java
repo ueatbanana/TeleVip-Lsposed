@@ -14,9 +14,7 @@ public class ClientChecker {
     }
 
     public enum ClientType {
-        Nekogram("tw.nekomimi.nekogram"),
-        
-        MDgram(new String[]{ "org.telegram.mdgram" });
+        Nekogram("tw.nekomimi.nekogram");
 
         final String[] packageNames;
 
