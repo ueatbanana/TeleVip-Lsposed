@@ -45,4 +45,11 @@ There are additional features that are not listed here.
 14. ForkGram 11.9.0.2 (583728)
 15. ForkClient Beta 11.5.3.0 (551109)
 
+## License
+
+This project is licensed under the GNU General Public License v3.0 (GPLv3).  
+See the [LICENSE](./LICENSE) file for more details.
+
+Partially based on [Re-Telegram](https://github.com/Sakion-Team/Re-Telegram).
+
 Developed by an @mustafa1dev
