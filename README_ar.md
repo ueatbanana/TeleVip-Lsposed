@@ -1,4 +1,4 @@
-<div dir="rtl" style="text-align: right; unicode-bidi: plaintext;">
+<div dir="rtl" style="direction: rtl; text-align: right; unicode-bidi: embed;">
 
 # TeleVip LSPosed
 
