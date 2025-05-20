@@ -1,4 +1,5 @@
-<div dir="rtl">
+<div dir="rtl" style="text-align: right; unicode-bidi: plaintext;">
+
 # TeleVip LSPosed
 
 وحدة لتعديل تطبيق تيليجرام تحتوي على الميزات التالية:
