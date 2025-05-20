@@ -5,7 +5,7 @@ A module for modifying Telegram with the following features:
 1. Hide "Seen" status for groups, channels, and private messages.
 
 2. Hide "Typing..." indicator.
-
+a
 3. Hide story view status.
 
 4. Unlock all restricted and encrypted features for channels.
