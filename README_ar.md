@@ -88,9 +88,9 @@
 
 # الرخصة
 
-هذا المشروع مرخّص بموجب رخصة جنو العمومية العامة الإصدار 3.0 (GPLv3).
-راجع ملف LICENSE لمزيد من التفاصيل.
+هذا المشروع مرخّص بموجب رخصة جنو العمومية العامة الإصدار License v3.0 (GPLv3).  
+راجع ملف [LICENSE](./LICENSE) لمزيد من التفاصيل.
 
-مبني جزئيًا على Re-Telegram](https://github.com/Sakion-Team/Re-Telegram).
+مبني جزئيًا على [Re-Telegram](https://github.com/Sakion-Team/Re-Telegram).
 
 تم التطوير بواسطة @mustafa1dev
