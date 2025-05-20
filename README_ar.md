@@ -1,3 +1,4 @@
+<div dir="rtl">
 # TeleVip LSPosed
 
 وحدة لتعديل تطبيق تيليجرام تحتوي على الميزات التالية:
@@ -70,10 +71,10 @@
 9. Nicegram 1.42.1 (1759)
 
 
-10. Telegram web ويب 11.9.0 (58379)
+10. Telegram web 11.9.0 (58379)
 
 
-11. Telegram beta بيتا 10.13.0 (48369)
+11. Telegram beta 10.13.0 (48369)
 
 
 12. Nekogram 11.5.3S (55150) – TeleVip 1.4.6
@@ -94,3 +95,4 @@
 مبني جزئيًا على [Re-Telegram](https://github.com/Sakion-Team/Re-Telegram).
 
 تم التطوير بواسطة @mustafa1dev
+</div>
