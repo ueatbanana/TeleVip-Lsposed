@@ -16,18 +16,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import com.my.televip.obfuscate.AutomationResolver;
 
 public class telengX extends StrVip {
 
 public static void Start(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
                   
 
-final Class<?> profileActivityClass = lpparam.classLoader.loadClass("org.telegram.ui.ProfileActivity");
-final        Class<?> messagesControllerClass = lpparam.classLoader.loadClass("org.telegram.messenger.MessagesController");
-final    Class<?> alertDialogBuilderClass = XposedHelpers.findClass(
-        "org.telegram.ui.ActionBar.AlertDialog.Builder",
-        lpparam.classLoader
-    );
+final Class<?> profileActivityClass = lpparam.classLoader.loadClass(AutomationResolver.resolve("org.telegram.ui.ProfileActivity"));
+
+
     final Class<?> itemClass = Class.forName("org.telegram.ui.Adapters.DrawerLayoutAdapter$Item", true, lpparam.classLoader);
 
 XposedHelpers.findAndHookMethod("org.telegram.ui.ProfileActivity", lpparam.classLoader, "createActionBarMenu", boolean.class, new XC_MethodHook() {
@@ -215,7 +213,7 @@ Class<?> launchActivityClass = XposedHelpers.findClass(
 
             XposedHelpers.findAndHookMethod(
                 launchActivityClass,
-                "lambda$onCreate$13", // اسم الدالة
+                AutomationResolver.resolve("LaunchActivity","lambda$onCreate$13",AutomationResolver.ResolverType.Method), // اسم الدالة
                 android.view.View.class, // نوع الوسيط الأول
                 int.class,
                 float.class, // نوع الوسيط الثاني

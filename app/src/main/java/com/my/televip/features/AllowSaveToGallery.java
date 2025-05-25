@@ -1,0 +1,23 @@
+package com.my.televip.features;
+
+import static com.my.televip.MainHook.lpparam;
+
+import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.obfuscate.AutomationResolver;
+
+import de.robv.android.xposed.XposedHelpers;
+
+public class AllowSaveToGallery {
+
+    public static void init() {
+        Class<?> PeerStoriesView$StoryItemHolderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.Stories.PeerStoriesView$StoryItemHolder"), lpparam.classLoader);
+        if (PeerStoriesView$StoryItemHolderClass != null) {
+            XposedHelpers.findAndHookMethod(PeerStoriesView$StoryItemHolderClass, "allowScreenshots", new AbstractMethodHook() {
+                @Override
+                protected void beforeMethod(MethodHookParam param) {
+                    param.setResult(true);
+                }
+            });
+        }
+}
+}

@@ -17,7 +17,7 @@ public class Utils {
 
     public static void log(String text)
     {
-     //   XposedBridge.log("[Re:Telegram] " + text);
+        XposedBridge.log("[TeleVip] " + text);
     }
 
     public static void log(Throwable throwable)

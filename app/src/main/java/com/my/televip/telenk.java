@@ -251,33 +251,13 @@ ondilag2(param,lpparam);
 
 }
 
-public static void ckDarck2(final XC_LoadPackage.LoadPackageParam lpparam) {
-        try {
-
-            // الحصول على الكائن الحالي من ThemeInfo
-            Object currentThemeInfo = XposedHelpers.callStaticMethod(
-                XposedHelpers.findClass("org.telegram.ui.ActionBar.q", lpparam.classLoader),
-                "x1"
-            );
-
-            if (currentThemeInfo != null) {
-                // التحقق من قيمة isDark
-                boolean isDark = (boolean) XposedHelpers.callMethod(currentThemeInfo, "J");
-                isCurrentThemeDay=isDark;
-            } else {
-                XposedBridge.log("ckDarck: getActiveTheme returned null.");
-            }
-        } catch (Exception e) {
-            XposedBridge.log("ckDarck: Error while checking isDark - " + e.getMessage());
-        }
-    }
 public static void ondilag2(final de.robv.android.xposed.XC_MethodHook.MethodHookParam param,final XC_LoadPackage.LoadPackageParam lpparam){
 final    Class<?> alertDialogBuilderClass = XposedHelpers.findClass(
         "org.telegram.ui.ActionBar.AlertDialog.Builder",
         lpparam.classLoader
     );
                         // تنفيذ الكود بعد استدعاء الدالة
-                        ckDarck2(lpparam);
+                        //ckDarck2(lpparam);
                         Object launchActivity = param.thisObject;
 
                         Object drawerLayoutAdapter = XposedHelpers.getObjectField(param.thisObject, "drawerLayoutAdapter");
@@ -348,11 +328,11 @@ checkBox.setChecked(true);
 }
 	
     checkBox.setText(item);
-    if (!isCurrentThemeDay){
-    checkBox.setTextColor(Color.BLACK); // تغيير لون النص إلى الأبيض
-    }else {
-    checkBox.setTextColor(Color.WHITE); 
-    }
+    //if (!isCurrentThemeDay){
+  //  checkBox.setTextColor(Color.BLACK); // تغيير لون النص إلى الأبيض
+   // }else {
+    //checkBox.setTextColor(Color.WHITE);
+    //}
     checkBox.setPadding(10, 10, 10, 10); // إضافة هامش صغير حول النص
     checkBox.setTypeface(Typeface.DEFAULT_BOLD); // جعل النص مائلًا قليلاً
     checkBoxes.add(checkBox);
@@ -876,14 +856,14 @@ XposedBridge.log("scrollToMessageId is call.");
                                       // إنشاء EditText مع تصميم جميل
 final EditText editText = new EditText(applicationContext);
 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-ckDarck2(lpparam);
-    if (!isCurrentThemeDay){
-    editText.setTextColor(0xFF000000);
-    editText.setHintTextColor(0xFF424242);
-    }else {
+//ckDarck2(lpparam);
+  //  if (!isCurrentThemeDay){
+  //  editText.setTextColor(0xFF000000);
+   // editText.setHintTextColor(0xFF424242);
+   // }else {
     editText.setTextColor(0xFFFFFFFF);
 editText.setHintTextColor(0xFFBDBDBD);
-    }
+ //   }
 editText.setTextSize(18); // تكبير النص
 editText.setPadding(20, 20, 20, 20); // إضافة هوامش داخلية
 

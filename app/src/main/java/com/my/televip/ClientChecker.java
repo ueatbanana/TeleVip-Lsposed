@@ -14,7 +14,9 @@ public class ClientChecker {
     }
 
     public enum ClientType {
-        Nekogram("tw.nekomimi.nekogram");
+        Telegram("org.telegram.messenger"),
+        TelegramWeb("org.telegram.messenger.web"),
+        Nekogram("org.telegr]");
 
         final String[] packageNames;
 

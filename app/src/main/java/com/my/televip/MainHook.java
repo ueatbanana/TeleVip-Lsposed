@@ -7,154 +7,68 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import android.content.Context;
 import android.app.Activity;
-import android.content.SharedPreferences;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.widget.*;
 import de.robv.android.xposed.*;
+
+import java.io.IOException;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.lang.reflect.Field;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import android.content.ClipData;
-import android.content.ClipboardManager;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+
+import com.my.televip.AlertDialog.onClickDialog;
+import com.my.televip.application.ApplicationLoaderHook;
+import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.features.FeatureManager;
+import com.my.televip.features.NEWAntiRecall;
+import com.my.televip.features.OtherFeatures;
+import com.my.televip.features.downloadSpeed;
+import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.virtuals.ActiveTheme;
+import com.my.televip.virtuals.EventType;
 
 public class MainHook extends StrVip implements IXposedHookLoadPackage {
+public static XC_LoadPackage.LoadPackageParam lpparam;
 
+    private static @NonNull ArrayList<String> getArrayList() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add(noRead);
+        list.add(noRead2);
+        list.add(noStoryRead);
+        list.add(HideOnline);
+        list.add(HidePhone);
+        list.add(hidestore);
+        list.add(NoTyping);
+        list.add(shmsdel);
+        list.add(PreventMedia);
+        list.add(usefolow);
+        list.add(allowShare);
+        list.add(pre);
+        return list;
+    }
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        MainHook.lpparam =lpparam;
         // استهداف تطبيق معين لتعديل ANDROID_ID
         Utils.pkgName = lpparam.packageName;
-
-        switch (lpparam.packageName) {
-            case "org.telegram.messenger":
-            case "org.telegram.messenger.web":
-            case "org.telegram.messenger.beta":
-
-
-                final Class<?> drawableClass = Class.forName("org.telegram.messenger.R$drawable", true, lpparam.classLoader);
-
+        xSharedPreferences.xSharedPre = new XSharedPreferences(lpparam.packageName, strTelevip);
                 final Class<?> itemClass = Class.forName("org.telegram.ui.Adapters.DrawerLayoutAdapter$Item", true, lpparam.classLoader);
 
-                XposedHelpers.findAndHookMethod("org.telegram.ui.ProfileActivity", lpparam.classLoader, "createActionBarMenu", boolean.class, new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        Object profileActivityInstance = param.thisObject;
-                        Class<?> profileActivityClass = lpparam.classLoader.loadClass("org.telegram.ui.ProfileActivity");
-                        Class<?> baseFragmentClass = lpparam.classLoader.loadClass("org.telegram.ui.ActionBar.BaseFragment");
-                        Class<?> longClass = Long.class;
-
-                        Method getMessagesControllerMethod = baseFragmentClass.getDeclaredMethod("getMessagesController");
-                        getMessagesControllerMethod.setAccessible(true);
-                        Object messagesController = getMessagesControllerMethod.invoke(profileActivityInstance);
-
-                        if (messagesController != null) {
-                            // الحصول على chatId
-                            Field chatIdField = profileActivityClass.getDeclaredField("chatId");
-                            chatIdField.setAccessible(true);
-                            final long chatId = chatIdField.getLong(profileActivityInstance);
-
-                            // تحويل chatId إلى Long
-                            Object chatIdObject = longClass.getDeclaredMethod("valueOf", long.class).invoke(null, chatId);
-
-                            // استدعاء getChat
-                            Method getChatMethod = messagesController.getClass().getDeclaredMethod("getChat", Long.class);
-                            getChatMethod.setAccessible(true);
-                            //noinspection JavaReflectionInvocation
-                            Object chat = getChatMethod.invoke(messagesController, chatIdObject);
-
-                            // الحصول على userId
-                            Field userIdField = profileActivityClass.getDeclaredField("userId");
-                            userIdField.setAccessible(true);
-                            final long userId = userIdField.getLong(profileActivityInstance);
-
-                            // تحويل userId إلى Long
-                            Object userIdObject = longClass.getDeclaredMethod("valueOf", long.class).invoke(null, userId);
-
-                            // استدعاء getUser
-                            Method getUserMethod = messagesController.getClass().getDeclaredMethod("getUser", Long.class);
-                            getUserMethod.setAccessible(true);
-                            //noinspection JavaReflectionInvocation
-                            Object user = getUserMethod.invoke(messagesController, userIdObject);
-
-                            // الحصول على otherItem
-                            Field otherItemField = profileActivityClass.getDeclaredField("otherItem");
-                            otherItemField.setAccessible(true);
-                            Object otherItem = otherItemField.get(profileActivityInstance);
-
-                            // استدعاء getUserConfig للحصول على clientUserId
-                            Method getUserConfigMethod = baseFragmentClass.getDeclaredMethod("getUserConfig");
-                            getUserConfigMethod.setAccessible(true);
-                            Object userConfig = getUserConfigMethod.invoke(profileActivityInstance);
-
-                            Method getClientUserIdMethod = userConfig.getClass().getDeclaredMethod("getClientUserId");
-                            getClientUserIdMethod.setAccessible(true);
-
-                            // استدعاء addSubItem على otherItem
-                            if (otherItem != null) {
-                                Method addSubItemMethod = otherItem.getClass().getDeclaredMethod(
-                                        "addSubItem",
-                                        int.class,
-                                        int.class,
-                                        CharSequence.class
-                                );
-                                addSubItemMethod.setAccessible(true);
-                                int drawableResource = XposedHelpers.getStaticIntField(drawableClass, "msg_filled_menu_users");
-                                Context applicationContext = (Context) XposedHelpers.getStaticObjectField(
-                                        XposedHelpers.findClass("org.telegram.messenger.ApplicationLoader", lpparam.classLoader),
-                                        "applicationContext"
-                                );
-
-                                if (chat != null) {
-                                    if (applicationContext != null) {
-                                        SharedPreferences te = applicationContext.getSharedPreferences("televip", Activity.MODE_PRIVATE);
-                                        te.edit().putString("id", String.valueOf(chatId)).apply();
-                                    }
-                                    addSubItemMethod.invoke(otherItem, 45, drawableResource, String.valueOf(chatId));
-                                } else if (user != null) {
-                                    if (applicationContext != null) {
-                                        SharedPreferences te = applicationContext.getSharedPreferences("televip", Activity.MODE_PRIVATE);
-                                        te.edit().putString("id", String.valueOf(userId)).apply();
-                                        addSubItemMethod.invoke(otherItem, 45, drawableResource, String.valueOf(userId));
-
-
-                                    }
-                                }
-                            }
-                        }
-                        //XposedBridge.log(com.my.televip.StringEncryptor.decrypt("0kWuiLX4BXWU6e/R3O1s0ZMON4hvavhTCww03zqpJq5f6P7SpciaZJDKb+Fw4P5R"));
-                    }
-                });
-                final Class<?> profileActivityClass3 = XposedHelpers.findClass(
-                        "org.telegram.ui.ProfileActivity$6",
-                        lpparam.classLoader
-                );
-
-                XposedHelpers.findAndHookMethod(
-                        profileActivityClass3,
-                        "onItemClick", // اسم الدالة
-                        int.class,
-                        new XC_MethodHook() {
-                            @Override
-                            protected void afterHookedMethod(MethodHookParam param) {
-                                int id = (int) param.args[0];
-                                final Context applicationContext = (Context) XposedHelpers.getStaticObjectField(
-                                        XposedHelpers.findClass("org.telegram.messenger.ApplicationLoader", lpparam.classLoader),
-                                        "applicationContext"
-                                );
-                                if (id == 45) {
-                                    if (applicationContext != null) {
-                                        final SharedPreferences te = applicationContext.getSharedPreferences("televip", Activity.MODE_PRIVATE);
-                                        ((ClipboardManager) applicationContext.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("clipboard", te.getString("id", "")));
-                                        Toast.makeText(applicationContext, te.getString("id", ""), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                            }
-                        });
-                TeleVip(lpparam);
-                TeleOne(lpparam);
+        ClassLoader classLoader = lpparam.classLoader;
+        ApplicationLoaderHook.init(classLoader);
+        NEWAntiRecall.initUI(lpparam.classLoader);
                 // استدعاء الطريقة من الكلاس Theme مباشرة
                 XposedHelpers.findAndHookMethod(
-                        "org.telegram.ui.Adapters.DrawerLayoutAdapter", // اسم الكلاس
+                        AutomationResolver.resolve("org.telegram.ui.Adapters.DrawerLayoutAdapter"), // اسم الكلاس
                         lpparam.classLoader,                           // الـ ClassLoader
                         "resetItems",                                   // اسم الدالة
                         new XC_MethodHook() {
@@ -164,36 +78,24 @@ public class MainHook extends StrVip implements IXposedHookLoadPackage {
 
                                 // العثور على المتغير الخاص
                                 Class<?> drawerLayoutAdapterClass = drawerLayoutAdapterInstance.getClass();
-                                Field itemsField = drawerLayoutAdapterClass.getDeclaredField("items");
+                                Field itemsField = drawerLayoutAdapterClass.getDeclaredField(AutomationResolver.resolve("DrawerLayoutAdapter","items", AutomationResolver.ResolverType.Field));
                                 itemsField.setAccessible(true);
                                 ArrayList<?> items = (ArrayList<?>) itemsField.get(drawerLayoutAdapterInstance);
 
                                 // استدعاء الكلاس Item باستخدام Class.forName
-                                Constructor<?> itemConstructor = itemClass.getDeclaredConstructor(int.class, CharSequence.class, int.class);
+                                Constructor<?> itemConstructor = itemClass.getDeclaredConstructor(AutomationResolver.resolveObject("obj5"));
                                 itemConstructor.setAccessible(true);
                                 // استدعاء الطريقة مباشرة
-                                int eventType = (int) XposedHelpers.callStaticMethod(
-                                        XposedHelpers.findClass("org.telegram.ui.ActionBar.Theme", lpparam.classLoader),
-                                        "getEventType"
-                                );
-                                int drawableResource;
-                                if (eventType == 0) {
-                                    drawableResource = XposedHelpers.getStaticIntField(drawableClass, "msg_settings_ny");
-                                } else if (eventType == 1) {
-                                    drawableResource = XposedHelpers.getStaticIntField(drawableClass, "msg_settings_14");
-
-                                } else if (eventType == 2) {
-                                    drawableResource = XposedHelpers.getStaticIntField(drawableClass, "msg_settings_hw");
-                                } else {
-                                    drawableResource = XposedHelpers.getStaticIntField(drawableClass, "msg_settings_old");
+                                if (loadClass.applicationContext == null) {
+                                    loadClass.applicationContext = (Context) XposedHelpers.getStaticObjectField(
+                                            XposedHelpers.findClass(AutomationResolver.resolve("org.telegram.messenger.ApplicationLoader"), lpparam.classLoader),
+                                            AutomationResolver.resolve("ApplicationLoader", "applicationContext", AutomationResolver.ResolverType.Field)
+                                    );
                                 }
-                                final Context applicationContext = (Context) XposedHelpers.getStaticObjectField(
-                                        XposedHelpers.findClass("org.telegram.messenger.ApplicationLoader", lpparam.classLoader),
-                                        "applicationContext"
-                                );
-                                Strck(applicationContext);
+                                Strck(loadClass.applicationContext);
 
-                                Object newItem = itemConstructor.newInstance(13048, GhostMode, drawableResource);
+                                //noinspection JavaReflectionInvocation
+                                Object newItem = itemConstructor.newInstance(13048, GhostMode, EventType.IconSettings());
 
                                 // إضافة الكائن الجديد إلى القائمة
                                 if (items instanceof ArrayList<?>) {
@@ -206,27 +108,236 @@ public class MainHook extends StrVip implements IXposedHookLoadPackage {
                 );
 
                 Class<?> launchActivityClass = XposedHelpers.findClass(
-                        "org.telegram.ui.LaunchActivity",
+                        AutomationResolver.resolve("org.telegram.ui.LaunchActivity"),
                         lpparam.classLoader
                 );
+                XC_MethodHook hook2 = new AbstractMethodHook() {
+                    @Override
+                    protected void afterMethod(final MethodHookParam param) {
 
-                XposedHelpers.findAndHookMethod(
-                        launchActivityClass,
-                        "lambda$onCreate$6", // اسم الدالة
-                        android.view.View.class, // نوع الوسيط الأول
-                        int.class,
-                        float.class, // نوع الوسيط الثاني
-                        float.class, // نوع الوسيط الثالث
-                        new XC_MethodHook() {
-                            @Override
-                            protected void afterHookedMethod(final MethodHookParam param) {
-                                ondilag(param, lpparam);
+                            final    Class<?> alertDialogBuilderClass = XposedHelpers.findClassIfExists(
+                                    AutomationResolver.resolve("org.telegram.ui.ActionBar.AlertDialog.Builder"),
+                                    lpparam.classLoader
+                            );
+                            if (alertDialogBuilderClass != null) {
+                                // تنفيذ الكود بعد استدعاء الدالة
+                                ActiveTheme.setActiveTheme();
+
+                                Object drawerLayoutAdapter = XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("LaunchActivity","drawerLayoutAdapter", AutomationResolver.ResolverType.Field));
+                                if (drawerLayoutAdapter != null) {
+
+                                    // استدعاء getId وطباعته
+                                    int result = (int) XposedHelpers.callMethod(drawerLayoutAdapter, AutomationResolver.resolve("DrawerLayoutAdapter","getId", AutomationResolver.ResolverType.Method), param.args[1]);
+                                    if (result == 13048) {
+                                        Object contextapp = param.thisObject;
+                                        final Context applicationContext = (Context) contextapp;
+                                        if (loadClass.applicationContext == null) {
+                                            loadClass.applicationContext = (Context) XposedHelpers.getStaticObjectField(
+                                                    XposedHelpers.findClass(AutomationResolver.resolve("org.telegram.messenger.ApplicationLoader"), lpparam.classLoader),
+                                                    AutomationResolver.resolve("ApplicationLoader", "applicationContext", AutomationResolver.ResolverType.Field)
+                                            );
+                                        }
+                                        xSharedPreferences.SharedPre = applicationContext.getSharedPreferences(strTelevip,Activity.MODE_PRIVATE);
+                                        readFeature();
+                                        Object alertDialog = XposedHelpers.newInstance(alertDialogBuilderClass, applicationContext);
+                                          // عرض رسالة أو تخصيص النافذة
+                                        Strck(applicationContext);
+                                        ArrayList<String> list = getArrayList();
+                                        final String[] items = list.toArray(new String[0]);
+                                        XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setTitle", AutomationResolver.ResolverType.Method), strTitle);
+                                        // إنشاء تخطيط جديد
+                                        LinearLayout layout = new LinearLayout(applicationContext);
+                                        layout.setOrientation(LinearLayout.VERTICAL);
+
+// إضافة CheckBox لكل عنصر في القائمة مع إعدادات النص
+                                        final List<CheckBox> checkBoxes = new ArrayList<>();
+                                        for (String item : items) {
+                                            CheckBox checkBox = new CheckBox(applicationContext);
+                                            if (item.equals(pre) && FeatureManager.isTelePremium()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(noRead) && FeatureManager.isHideSeenPrivate()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(noRead2) && FeatureManager.isHideSeenGroup()) {
+                                                checkBox.setChecked(true);
+                                            }
+                                            if (item.equals(NoTyping) && FeatureManager.isHideTyping()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(noStoryRead) && FeatureManager.isNoStoryRead()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(usefolow) && FeatureManager.isUnlockChannelFeature()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(allowShare) && FeatureManager.isAllowSaveToGallery()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(HideOnline) && FeatureManager.isHideOnline()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(PreventMedia) && FeatureManager.isPreventMedia()) {
+                                                checkBox.setChecked(true);
+                                                try {
+                                                    checkBox.setOnLongClickListener(_view -> {
+                                                        if (!playing) {
+                                                            regr = (int) (Math.random() * 3);
+                                                            if (regr == 0) {
+                                                                audioUrl = "https://qurango.net/radio/abdulbasit_abdulsamad_mojawwad";
+                                                            } else if (regr == 1) {
+                                                                audioUrl = "https://qurango.net/radio/yasser_aldosari";
+                                                            } else {
+                                                                audioUrl = "https://backup.qurango.net/radio/maher";
+                                                            }
+                                                            mediaPlayer = new MediaPlayer();
+                                                            //noinspection deprecation
+                                                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                                                            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                                                                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                                                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                                                    .build();
+
+                                                            mediaPlayer.setAudioAttributes(audioAttributes);
+                                                            try {
+                                                                mediaPlayer.setDataSource(audioUrl);
+                                                            } catch (IllegalArgumentException |
+                                                                     IllegalStateException |
+                                                                     IOException e) {
+                                                                throw new RuntimeException(e);
+                                                            }
+                                                            mediaPlayer.prepareAsync();
+
+                                                            mediaPlayer.setOnPreparedListener(mp -> {
+                                                                mediaPlayer.start();
+                                                                playing = true;
+                                                            });
+                                                        } else {
+                                                            if (mediaPlayer.isPlaying()) {
+                                                                mediaPlayer.stop();
+                                                                mediaPlayer.release();
+
+                                                                mediaPlayer = new MediaPlayer();
+                                                                //noinspection deprecation
+                                                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                                                                AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                                                                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                                                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                                                        .build();
+
+                                                                mediaPlayer.setAudioAttributes(audioAttributes);
+                                                                try {
+                                                                    mediaPlayer.setDataSource(audioUrl);
+                                                                } catch (IllegalArgumentException |
+                                                                         IllegalStateException |
+                                                                         IOException e) {
+                                                                    throw new RuntimeException(e);
+                                                                }
+
+                                                                playing = false;
+
+                                                            }
+                                                        }
+                                                        return true;
+                                                    });
+                                                } catch (Exception ex) {
+                                                    ErrorShow(ex.getMessage());
+                                                }
+                                            } else if (item.equals(HidePhone) && FeatureManager.isHidePhone()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(shmsdel) && FeatureManager.ishowDeletedMessages()) {
+                                                checkBox.setChecked(true);
+                                            } else if (item.equals(hidestore) && FeatureManager.isDisableStories()) {
+                                                checkBox.setChecked(true);
+                                            }
+
+                                            checkBox.setText(item);
+                                            if (!ActiveTheme.isCurrentThemeDay) {
+                                                checkBox.setTextColor(Color.BLACK); // تغيير لون النص إلى الأبيض
+                                            } else {
+                                                checkBox.setTextColor(Color.WHITE);
+                                            }
+                                            checkBox.setPadding(10, 10, 10, 10); // إضافة هامش صغير حول النص
+                                            checkBox.setTypeface(Typeface.DEFAULT_BOLD); // جعل النص مائلًا قليلاً
+                                            checkBoxes.add(checkBox);
+                                            layout.addView(checkBox);
+                                        }
+
+// إعداد AlertDialog واستخدام setView
+                                        XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setView", AutomationResolver.ResolverType.Method), layout);
+
+
+// نحصل على الكلاس الداخلي OnButtonClickListener
+                                        Object onDoneListener;
+                                        Object onCnelListener;
+                                        if (lpparam.packageName.equals("com.tgconnect.android") || lpparam.packageName.equals("org.telegram.messenger.beta")) {
+                                            onDoneListener = (DialogInterface.OnClickListener) (dialog, which) -> onClickDialog.onClickSave(checkBoxes);
+                                            onCnelListener = (DialogInterface.OnClickListener) (dialog, which) -> onClickDialog.onClickOpenUrl(applicationContext,param);
+                                        } else {
+                                            Class<?> listenerClass = XposedHelpers.findClass(
+                                                    AutomationResolver.resolve("org.telegram.ui.ActionBar.AlertDialog$OnButtonClickListener"),
+                                                    lpparam.classLoader
+                                            );
+
+// ننشئ كائن من هذا الكلاس باستخدام Proxy (لأنه interface)
+                                            onDoneListener = Proxy.newProxyInstance(
+                                                    lpparam.classLoader,
+                                                    new Class[]{listenerClass},
+                                                    (proxy, method, args) -> {
+                                                        if (method.getName().equals("onClick")) {
+                                                            onClickDialog.onClickSave(checkBoxes);
+                                                        }
+                                                        //noinspection SuspiciousInvocationHandlerImplementation
+                                                        return null;
+                                                    }
+                                            );
+                                            onCnelListener = Proxy.newProxyInstance(
+                                                    lpparam.classLoader,
+                                                    new Class[]{listenerClass},
+                                                    (proxy, method, args) -> {
+                                                        if (method.getName().equals("onClick")) {
+                                                            onClickDialog.onClickOpenUrl(applicationContext,param);
+                                                        }
+                                                        //noinspection SuspiciousInvocationHandlerImplementation
+                                                        return null;
+                                                    }
+                                            );
+
+                                        }
+                                        // إعداد الزر الموجب
+                                        XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setPositiveButton", AutomationResolver.ResolverType.Method),
+                                                btnsave, onDoneListener
+                                        );
+                                        XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setNegativeButton", AutomationResolver.ResolverType.Method),
+                                                chena, onCnelListener
+                                        );
+/*
+XposedHelpers.callMethod(alertDialog, "setNeutralButton",
+    "سجل القنوات",
+    new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+        XposedHelpers.callMethod(dialog, "dismiss");
+                  }
+    }
+);
+*/
+
+
+                                        XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "show", AutomationResolver.ResolverType.Method));
+                                    }
+
+                                }else {
+                                    Utils.log("Not found DrawerLayoutAdapter, " + Utils.issue);
+                                }
+                            }else {
+                                Utils.log("Not found org.telegram.ui.ActionBar.AlertDialog.Builder, " + Utils.issue);
                             }
                         }
-                );
+                };
+                XposedHelpers.findAndHookMethod(
+                        launchActivityClass,
+                        "lambda$onCreate$6", AutomationResolver.merge(AutomationResolver.resolveObject("obj6"),hook2));
+                readFeature();
+                downloadSpeed.init();
+                OtherFeatures.init();
 
+                /*
 
-                break;
+                  break;
             case "org.telegram.plus":
                 teleplus.Start(lpparam);
                 break;
@@ -266,11 +377,10 @@ public class MainHook extends StrVip implements IXposedHookLoadPackage {
                 break;
             default:
         }
+
+                 */
+
     }
 
-
-
-              
-                                    
 }
 
