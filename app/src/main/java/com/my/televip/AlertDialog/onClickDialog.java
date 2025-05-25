@@ -34,9 +34,9 @@ public class onClickDialog extends StrVip{
                 CheckBox checkBox = checkBoxes.get(i);
                 if (checkBox.isChecked()) {
                     if (checkBox.getText().toString().equals(pre)) {
-                        xSharedPreferences.xSharedPre.edit().putString("prem", "true").apply();
+                        xSharedPreferences.SharedPre.edit().putString("prem", "true").apply();
                     } else if (checkBox.getText().toString().equals(noRead)) {
-                        xSharedPreferences.xSharedPre.edit().putString("noRead", "true").apply();
+                        xSharedPreferences.SharedPre.edit().putString("noRead", "true").apply();
                     } else if (checkBox.getText().toString().equals(noRead2)) {
                         xSharedPreferences.SharedPre.edit().putString("noRead2", "true").apply();
                     } else if (checkBox.getText().toString().equals(NoTyping)) {
