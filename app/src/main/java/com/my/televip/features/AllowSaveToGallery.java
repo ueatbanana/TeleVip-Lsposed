@@ -12,7 +12,7 @@ public class AllowSaveToGallery {
     public static void init() {
         Class<?> PeerStoriesView$StoryItemHolderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.Stories.PeerStoriesView$StoryItemHolder"), lpparam.classLoader);
         if (PeerStoriesView$StoryItemHolderClass != null) {
-            XposedHelpers.findAndHookMethod(PeerStoriesView$StoryItemHolderClass, "allowScreenshots", new AbstractMethodHook() {
+            XposedHelpers.findAndHookMethod(PeerStoriesView$StoryItemHolderClass, AutomationResolver.resolve("PeerStoriesView$StoryItemHolder","allowScreenshots", AutomationResolver.ResolverType.Method), new AbstractMethodHook() {
                 @Override
                 protected void beforeMethod(MethodHookParam param) {
                     param.setResult(true);

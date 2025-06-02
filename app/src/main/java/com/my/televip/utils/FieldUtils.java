@@ -41,93 +41,6 @@ public class FieldUtils {
         return null;
     }
 
-    /*public static Field getFieldOfClass(Object clazz, String fieldName) {
-        try
-        {
-            Field field = clazz.getClass().getDeclaredField(fieldName);
-
-            if (!field.isAccessible())
-                field.setAccessible(true);
-
-            return field;
-        }
-        catch (NoSuchFieldException e)
-        {
-            Utils.log(e);
-            return null;
-        }
-    }*/
-
-    public static double getFieldDoubleOfClass(Object clazz, String fieldName) {
-        try
-        {
-            Field field = clazz.getClass().getDeclaredField(fieldName);
-
-            if (!field.isAccessible())
-                field.setAccessible(true);
-
-            return field.getDouble(clazz);
-        }
-        catch (Exception e)
-        {
-            Utils.log(e);
-            return Double.MIN_VALUE;
-        }
-    }
-
-    public static double getFieldDoubleOfClass(Class<?> clazz, Object instance, String fieldName) {
-        try
-        {
-            Field field = clazz.getDeclaredField(fieldName);
-
-            if (!field.isAccessible())
-                field.setAccessible(true);
-
-            return field.getDouble(instance);
-        }
-        catch (Exception e)
-        {
-            Utils.log(e);
-            return Double.MIN_VALUE;
-        }
-    }
-
-    public static float getFieldFloatOfClass(Object clazz, String fieldName) {
-        try
-        {
-            return XposedHelpers.getFloatField(clazz, fieldName);
-            /*Field field = clazz.getClass().getDeclaredField(fieldName);
-
-            if (!field.isAccessible())
-                field.setAccessible(true);
-
-            return field.getFloat(clazz);*/
-        }
-        catch (Exception e)
-        {
-            Utils.log(e);
-            return Float.MIN_VALUE;
-        }
-    }
-
-    public static float getFieldFloatOfClass(Object instance, Class<?> clazz, String fieldName) {
-        try
-        {
-            return XposedHelpers.getFloatField(instance, fieldName);
-            /*Field field = clazz.getDeclaredField(fieldName);
-
-            if (!field.isAccessible())
-                field.setAccessible(true);
-
-            return field.getFloat(instance);*/
-        }
-        catch (Exception e)
-        {
-            Utils.log(e);
-            return Float.MIN_VALUE;
-        }
-    }
-
     public static int getFieldIntOfClass(Object clazz, String fieldName) {
         try
         {
@@ -236,11 +149,4 @@ public class FieldUtils {
         }
     }
 
-    public static void setField(Field field, Object instance, Object newValue) throws IllegalAccessException
-    {
-        if (!field.isAccessible())
-            field.setAccessible(true);
-
-        field.set(instance, newValue);
-    }
 }

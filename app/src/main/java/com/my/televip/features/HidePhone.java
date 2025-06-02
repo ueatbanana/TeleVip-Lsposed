@@ -2,8 +2,8 @@ package com.my.televip.features;
 
 import static com.my.televip.MainHook.lpparam;
 
-import com.my.televip.Utils;
 import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.loadClass;
 import com.my.televip.obfuscate.AutomationResolver;
 
 import java.lang.reflect.Method;
@@ -12,35 +12,39 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
 public class HidePhone {
-
+private static Method getUserConfigMethod;
+private static Method getClientUserIdMethod;
     public static void init() {
-    Class<?> MessagesControllerClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessagesController"), lpparam.classLoader);
-    if (MessagesControllerClass != null) {
-        Class<?> baseFragmentClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.BaseController"), lpparam.classLoader);
-        if (baseFragmentClass != null) {
-            XposedHelpers.findAndHookMethod(MessagesControllerClass, "getUser", Long.class, new XC_MethodHook() {
+        if (loadClass.MessagesControllerClass == null) {
+            loadClass.MessagesControllerClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessagesController"), lpparam.classLoader);
+        }
+    if (loadClass.MessagesControllerClass != null) {
+        Class<?> baseControllerClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.BaseController"), lpparam.classLoader);
+        if (baseControllerClass != null) {
+
+            XposedHelpers.findAndHookMethod(loadClass.MessagesControllerClass, AutomationResolver.resolve("MessagesController","getUser", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("para1"), new AbstractMethodHook() {
                 @Override
-                protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
+                protected void afterMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
                     Object userObject = param.getResult();
                     Object MessagesControllerInstance = param.thisObject;
                     if (userObject != null) {
-
-
-                        Method getUserConfigMethod = baseFragmentClass.getDeclaredMethod("getUserConfig");
-                        getUserConfigMethod.setAccessible(true);
+                        if (getUserConfigMethod == null) {
+                            getUserConfigMethod = baseControllerClass.getDeclaredMethod(AutomationResolver.resolve("BaseController","getUserConfig", AutomationResolver.ResolverType.Method));
+                            getUserConfigMethod.setAccessible(true);
+                    }
                         Object userConfig = getUserConfigMethod.invoke(MessagesControllerInstance);
-
-                        Method getClientUserIdMethod = userConfig.getClass().getDeclaredMethod("getClientUserId");
-                        getClientUserIdMethod.setAccessible(true);
+                        if (getClientUserIdMethod == null) {
+                            getClientUserIdMethod = userConfig.getClass().getDeclaredMethod(AutomationResolver.resolve("UserConfig","getClientUserId", AutomationResolver.ResolverType.Method));
+                            getClientUserIdMethod.setAccessible(true);
+                        }
                         long clientUserId = (long) getClientUserIdMethod.invoke(userConfig);
                         long userid = (long) param.args[0];
-
                         if (clientUserId == userid) {
-                            XposedHelpers.setObjectField(userObject, "phone", null);
+                            XposedHelpers.setObjectField(userObject, AutomationResolver.resolve("UserConfig","phone", AutomationResolver.ResolverType.Field), null);
                         }
                     }
                 }
-            });
+            }));
         }
     }
     }

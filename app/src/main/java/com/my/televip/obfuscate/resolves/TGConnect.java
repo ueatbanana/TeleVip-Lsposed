@@ -16,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class TelegramWeb {
+public class TGConnect {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -338,7 +338,7 @@ public class TelegramWeb {
                 com.my.televip.loadClass.MessageObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessageObject"), lpparam.classLoader);
             }
             Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
-            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, java.lang.Runnable.class, java.lang.Runnable.class});
+            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, Runnable.class, Runnable.class});
         }
         public void loadParameter8() {
             Class<?> Userlass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$User"), lpparam.classLoader);

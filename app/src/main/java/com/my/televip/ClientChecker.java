@@ -12,11 +12,25 @@ public class ClientChecker {
     {
         return check(client, Utils.pkgName);
     }
+    public static String getClientType(ClientType client){
+        String pkg = String.valueOf(Arrays.asList(client.getPackageNames()));
+        pkg = pkg.replace("[","").replace("]","").trim();
+        return pkg;
+    }
 
     public enum ClientType {
         Telegram("org.telegram.messenger"),
         TelegramWeb("org.telegram.messenger.web"),
-        Nekogram("org.telegr]");
+        TelegramPlus("org.telegram.plus"),
+        TGConnect("com.tgconnect.android"),
+        Nagram("xyz.nextalone.nagram"),
+        Nekogram("org.telegr]"),
+        Nicegram("app.nicegram"),
+        Cherrygram("uz.unnarsx.cherrygram"),
+        TelegramBeta("org.telegram.messenger.beta"),
+        NagramX("nu.gpu.nagram"),
+        XPlus("com.xplus.messenger"),
+        iMe("com.iMe.android");
 
         final String[] packageNames;
 
@@ -28,6 +42,20 @@ public class ClientChecker {
         public String[] getPackageNames()
         {
             return packageNames;
+        }
+
+        public static ClientType fromPackage(String pkg){
+            for (ClientType type: ClientType.values()){
+                for (String name: type.getPackageNames()){
+                    if (name.equals(pkg)){
+                        return type;
+                    }
+                }
+            }
+            return null;
+        }
+        public static boolean containsPackage(String pkg){
+            return fromPackage(pkg) != null;
         }
     }
 }

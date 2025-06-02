@@ -16,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class TelegramWeb {
+public class Nicegram {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -43,7 +43,7 @@ public class TelegramWeb {
         classList.add(new ClassInfo("org.telegram.ui.Adapters.DrawerLayoutAdapter", "org.telegram.ui.Adapters.DrawerLayoutAdapter"));
         classList.add(new ClassInfo("org.telegram.messenger.R$drawable", "org.telegram.messenger.R$drawable"));
         classList.add(new ClassInfo("org.telegram.ui.LaunchActivity", "org.telegram.ui.LaunchActivity"));
-        classList.add(new ClassInfo("org.telegram.ui.ActionBar.AlertDialog.Builder", "org.telegram.ui.ActionBar.AlertDialog.Builder"));
+        classList.add(new ClassInfo("org.telegram.ui.ActionBar.AlertDialog.Builder", "org.telegram.ui.ActionBar.AlertDialog$Builder"));
         classList.add(new ClassInfo("org.telegram.messenger.browser.Browser", "org.telegram.messenger.browser.Browser"));
         classList.add(new ClassInfo("org.telegram.ui.ActionBar.AlertDialog$OnButtonClickListener", "org.telegram.ui.ActionBar.AlertDialog$OnButtonClickListener"));
         classList.add(new ClassInfo("org.telegram.messenger.MessagesController$ReadTask", "org.telegram.messenger.MessagesController$ReadTask"));
@@ -287,38 +287,38 @@ public class TelegramWeb {
         public static boolean has(String name)
         {
             boolean has = false;
-            Class<?>[] classes = objectList.get(name);
-            if (classes != null){
-                has = true;
-            }
+           Class<?>[] classes = objectList.get(name);
+           if (classes != null){
+               has = true;
+           }
             return has;
         }
     }
     public static class loadParameter implements LoaderParameter {
 
         public void loadParameter1() {
-            Class<?> classStories$StoryItem = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.tl.TL_stories$StoryItem"), MainHook.lpparam.classLoader);
-            Class<?> classsStories$PeerStories = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.tl.TL_stories$PeerStories"), MainHook.lpparam.classLoader);
-            ParameterResolver.register("Parameter1", new Class[]{classsStories$PeerStories, classStories$StoryItem, boolean.class});
+                Class<?> classStories$StoryItem = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.tl.TL_stories$StoryItem"), MainHook.lpparam.classLoader);
+                Class<?> classsStories$PeerStories = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.tl.TL_stories$PeerStories"), MainHook.lpparam.classLoader);
+                ParameterResolver.register("Parameter1", new Class[]{classsStories$PeerStories, classStories$StoryItem, boolean.class});
         }
         public void loadParameter2() {
-            Class<?> readTaskClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessagesController$ReadTask"), lpparam.classLoader);
-            ParameterResolver.register("Parameter2", new Class[]{readTaskClass});
+                Class<?> readTaskClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessagesController$ReadTask"), lpparam.classLoader);
+                ParameterResolver.register("Parameter2", new Class[]{readTaskClass});
 
         }
         public void loadParameter3() {
-            Class<?> TLRPC$ChatClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$Chat"), lpparam.classLoader);
-            ParameterResolver.register("Parameter3", new Class[]{TLRPC$ChatClass});
+                Class<?> TLRPC$ChatClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$Chat"), lpparam.classLoader);
+                ParameterResolver.register("Parameter3", new Class[]{TLRPC$ChatClass});
 
         }
         public void loadParameter4() {
-            Class<?> tlObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLObject"), lpparam.classLoader);
-            Class<?> requestDelegateClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.RequestDelegate"), lpparam.classLoader);
-            Class<?> requestDelegateTimestampClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.RequestDelegateTimestamp"), lpparam.classLoader);
-            Class<?> quickAckDelegateClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.QuickAckDelegate"), lpparam.classLoader);
-            Class<?> writeToSocketDelegateClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.WriteToSocketDelegate"), lpparam.classLoader);
+                Class<?> tlObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLObject"), lpparam.classLoader);
+                Class<?> requestDelegateClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.RequestDelegate"), lpparam.classLoader);
+                Class<?> requestDelegateTimestampClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.RequestDelegateTimestamp"), lpparam.classLoader);
+                Class<?> quickAckDelegateClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.QuickAckDelegate"), lpparam.classLoader);
+                Class<?> writeToSocketDelegateClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.WriteToSocketDelegate"), lpparam.classLoader);
 
-            ParameterResolver.register("Parameter4", new Class[]{tlObjectClass, requestDelegateClass, requestDelegateTimestampClass, quickAckDelegateClass, writeToSocketDelegateClass, int.class, int.class, int.class, boolean.class, int.class});
+                 ParameterResolver.register("Parameter4", new Class[]{tlObjectClass, requestDelegateClass, requestDelegateTimestampClass, quickAckDelegateClass, writeToSocketDelegateClass, int.class, int.class, int.class, boolean.class, int.class});
 
         }
         public void loadParameter5() {
@@ -337,16 +337,16 @@ public class TelegramWeb {
             if (com.my.televip.loadClass.MessageObjectClass == null) {
                 com.my.televip.loadClass.MessageObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessageObject"), lpparam.classLoader);
             }
-            Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
-            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, java.lang.Runnable.class, java.lang.Runnable.class});
+                Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
+                ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, Runnable.class, Runnable.class});
         }
         public void loadParameter8() {
-            Class<?> Userlass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$User"), lpparam.classLoader);
-            ParameterResolver.register("Parameter8", new Class[]{Userlass});
+                Class<?> Userlass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$User"), lpparam.classLoader);
+                ParameterResolver.register("Parameter8", new Class[]{Userlass});
         }
         public void loadParameter9() {
-            Class<?> conClass = XposedHelpers.findClassIfExists("android.content.Context", lpparam.classLoader);
-            ParameterResolver.register("Parameter9", new Class[]{conClass});
+                Class<?> conClass = XposedHelpers.findClassIfExists("android.content.Context", lpparam.classLoader);
+                ParameterResolver.register("Parameter9", new Class[]{conClass});
         }
         public void loadParameter10() {}
     }

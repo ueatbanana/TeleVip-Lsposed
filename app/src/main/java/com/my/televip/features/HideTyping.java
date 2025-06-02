@@ -14,11 +14,11 @@ public class HideTyping {
         if (chatActivityEnterViewDelegateClass != null) {
             XposedHelpers.findAndHookMethod(
                     chatActivityEnterViewDelegateClass,
-                    "needSendTyping",
+                    AutomationResolver.resolve("ChatActivity$ChatActivityEnterViewDelegate","needSendTyping", AutomationResolver.ResolverType.Method),
                     new AbstractMethodHook() {
                         @Override
                         protected void beforeMethod(MethodHookParam param) {
-                                XposedBridge.log("needSendTyping method is blocked.");
+                                //XposedBridge.log("needSendTyping method is blocked.");
                                 param.setResult(null);
                         }
                     });

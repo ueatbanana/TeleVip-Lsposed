@@ -12,7 +12,7 @@ public class downloadSpeed {
     public static void init() {
         Class<?> FileLoadOperationClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.FileLoadOperation"), lpparam.classLoader);
 if (FileLoadOperationClass != null) {
-    XposedHelpers.findAndHookMethod(FileLoadOperationClass, "updateParams",  new AbstractMethodHook() {
+    XposedHelpers.findAndHookMethod(FileLoadOperationClass, AutomationResolver.resolve("FileLoadOperation","updateParams", AutomationResolver.ResolverType.Method),  new AbstractMethodHook() {
         @Override
         protected void afterMethod(MethodHookParam param) {
             int downloadChunkSizeBig;

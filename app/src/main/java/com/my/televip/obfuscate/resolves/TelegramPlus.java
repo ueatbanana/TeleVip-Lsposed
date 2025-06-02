@@ -16,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class TelegramWeb {
+public class TelegramPlus {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class TelegramWeb {
         classList.add(new ClassInfo("org.telegram.ui.Stories.StoriesController", "org.telegram.ui.Stories.StoriesController"));
         classList.add(new ClassInfo("org.telegram.tgnet.TLRPC$User", "org.telegram.tgnet.TLRPC$User"));
         classList.add(new ClassInfo("org.telegram.messenger.FileLoadOperation", "org.telegram.messenger.FileLoadOperation"));
-        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$13"));
+        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$14"));
         classList.add(new ClassInfo("org.telegram.messenger.DownloadController", "org.telegram.messenger.DownloadController"));
         classList.add(new ClassInfo("org.telegram.messenger.BaseController", "org.telegram.messenger.BaseController"));
         classList.add(new ClassInfo("org.telegram.messenger.UserObject", "org.telegram.messenger.UserObject"));
@@ -142,7 +142,7 @@ public class TelegramWeb {
         methodList.add(new MethodInfo("SQLitePreparedStatement", "bindInteger", "bindInteger"));
         methodList.add(new MethodInfo("SQLitePreparedStatement", "step", "step"));
         methodList.add(new MethodInfo("LongSparseArray", "get", "get"));
-        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$6", "lambda$onCreate$6"));
+        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$8", "lambda$onCreate$6"));
         methodList.add(new MethodInfo("BaseFragment", "getMessagesController", "getMessagesController"));
         methodList.add(new MethodInfo("MessagesController", "getChat", "getChat"));
         methodList.add(new MethodInfo("MessagesController", "getUser", "getUser"));
@@ -338,7 +338,7 @@ public class TelegramWeb {
                 com.my.televip.loadClass.MessageObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessageObject"), lpparam.classLoader);
             }
             Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
-            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, java.lang.Runnable.class, java.lang.Runnable.class});
+            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, Runnable.class, Runnable.class});
         }
         public void loadParameter8() {
             Class<?> Userlass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$User"), lpparam.classLoader);

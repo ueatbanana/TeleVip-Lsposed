@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.my.televip.ClientChecker;
 import com.my.televip.MainHook;
 import com.my.televip.StrVip;
 import com.my.televip.obfuscate.AutomationResolver;
@@ -16,10 +17,15 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-public class onClickDialog extends StrVip{
+public class onClickDialog extends StrVip {
     public static void onClickOpenUrl(Context applicationContext, XC_MethodHook.MethodHookParam param){
-        Object drawerLayoutContainer = XposedHelpers.getObjectField(param.thisObject, "drawerLayoutContainer");
-        if (drawerLayoutContainer != null) {
+        Object drawerLayoutContainer = null;
+        if (ClientChecker.check(ClientChecker.ClientType.NagramX)){
+            drawerLayoutContainer = XposedHelpers.getObjectField(param.args[0], AutomationResolver.resolve("LaunchActivity", "drawerLayoutContainer", AutomationResolver.ResolverType.Field));
+        }else {
+            drawerLayoutContainer = XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("LaunchActivity", "drawerLayoutContainer", AutomationResolver.ResolverType.Field));
+        }
+         if (drawerLayoutContainer != null) {
             XposedHelpers.callStaticMethod(
                     XposedHelpers.findClass(AutomationResolver.resolve("org.telegram.messenger.browser.Browser"), MainHook.lpparam.classLoader),
                     AutomationResolver.resolve("Browser","openUrl", AutomationResolver.ResolverType.Method), applicationContext, "https://t.me/t_l0_e"
@@ -94,12 +100,11 @@ public class onClickDialog extends StrVip{
     }
     public static void onClickToMessageId(EditText editText, Object chatActivity){
         String inputText = editText.getText().toString().trim();
-
         // التحقق من المدخلات
         if (!inputText.isEmpty()) {
             int msid = Integer.parseInt(inputText);
-            XposedHelpers.callMethod(chatActivity, "scrollToMessageId", msid, 0, true, 0, true, 0);
-            XposedBridge.log("scrollToMessageId is call.");
+            XposedHelpers.callMethod(chatActivity, AutomationResolver.resolve("ChatActivity", "scrollToMessageId", AutomationResolver.ResolverType.Method), msid, 0, true, 0, true, 0);
+            // XposedBridge.log("scrollToMessageId is call.");
 
         }
     }

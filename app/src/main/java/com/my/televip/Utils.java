@@ -17,7 +17,7 @@ public class Utils {
 
     public static void log(String text)
     {
-        XposedBridge.log("[TeleVip] " + text);
+        XposedBridge.log("[TeleVip] pkgName: "+ pkgName +" " + text);
     }
 
     public static void log(Throwable throwable)

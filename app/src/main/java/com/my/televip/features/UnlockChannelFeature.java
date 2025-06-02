@@ -13,20 +13,18 @@ import de.robv.android.xposed.XposedHelpers;
 public class UnlockChannelFeature {
 
     public static void init() {
-        Class<?> messagesControllerClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessagesController"), lpparam.classLoader);
-        if (messagesControllerClass != null) {
-            loadClass.loadObj8();
-            XC_MethodHook hook = new AbstractMethodHook() {
+        if (loadClass.MessagesControllerClass == null) {
+            loadClass.MessagesControllerClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessagesController"), lpparam.classLoader);
+        }
+        if (loadClass.MessagesControllerClass != null) {
+            AutomationResolver.loadParameter("3");
+            XposedHelpers.findAndHookMethod(loadClass.MessagesControllerClass, AutomationResolver.resolve("MessagesController","isChatNoForwards", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("Parameter3"),  new AbstractMethodHook() {
                 @Override
                 protected void beforeMethod(MethodHookParam param) {
-                    if (xSharedPreferences.xSharedPre.contains("usefolow")) {
-                        param.setResult(false);
-                    }
+                    param.setResult(false);
 
                 }
-            };
-
-            XposedHelpers.findAndHookMethod(messagesControllerClass, "isChatNoForwards", AutomationResolver.merge(AutomationResolver.resolveObject("obj8"), hook));
+            }));
         }
     }
 

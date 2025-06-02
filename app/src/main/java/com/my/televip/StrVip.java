@@ -11,38 +11,18 @@ import java.util.Locale;
 import de.robv.android.xposed.*;
 
 import android.content.res.Configuration;
-import android.app.Activity;
 
-import android.content.SharedPreferences;
-import android.text.*;
-import android.view.*;
-import android.widget.*;
-import android.widget.LinearLayout;
-import android.content.DialogInterface;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.media.MediaPlayer;
-import com.my.televip.application.ApplicationLoaderHook;
+
 import com.my.televip.features.AllowSaveToGallery;
 import com.my.televip.features.DisableStories;
 import com.my.televip.features.FeatureManager;
-import com.my.televip.features.HideOnline;
-import com.my.televip.features.HidePhone;
 import com.my.televip.features.HideSeen;
 import com.my.televip.features.HideTyping;
 import com.my.televip.features.NEWAntiRecall;
 import com.my.televip.features.NoStoryRead;
-import com.my.televip.features.OtherFeatures;
-import com.my.televip.features.PreventMedia;
 import com.my.televip.features.TelePremium;
 import com.my.televip.features.UnlockChannelFeature;
-import com.my.televip.features.downloadSpeed;
-import com.my.televip.obfuscate.AutomationResolver;
-import com.my.televip.virtuals.ActiveTheme;
-
-import java.lang.reflect.Proxy;
 
 public class StrVip {
 
@@ -78,10 +58,8 @@ public static String copname;
 public static String copname2;
 public static String onlinestatic;
 public static boolean isshow=false;
-public static boolean istru=false;
-public static boolean playing=false;
+    public static boolean playing=false;
 public static int regr=0;
-public static MediaPlayer mediaPlayer;
 public static String audioUrl;
 public static String hidestore;
 public static String strTelevip="televip";
@@ -199,7 +177,7 @@ public static void ondilag(final de.robv.android.xposed.XC_MethodHook.MethodHook
 }
 
 public static void readFeature(){
-
+    xSharedPreferences.xSharedPre = new XSharedPreferences(lpparam.packageName, strTelevip);
     if (FeatureManager.isTelePremium()) {TelePremium.init();}
     if (FeatureManager.isHideSeenGroup() || FeatureManager.isHideSeenPrivate()) { HideSeen.init(); }
     if (FeatureManager.isNoStoryRead()){ NoStoryRead.init(); }
@@ -223,28 +201,8 @@ public static void readFeature(){
 
 
         public static void TeleVip(final XC_LoadPackage.LoadPackageParam lpparam) {
-            try {
-            if (lpparam.packageName.equals("uz.unnarsx.cherrygram")){  
-            
-            strTelevip = "cherrygram";
-            
-            }else {
-            strTelevip = "televip";
-            }
-
-
       if (lpparam.packageName.equals("com.iMe.android") || lpparam.packageName.equals("com.iMe.android.web")){  
-            Class<?> userConfigClass3 = XposedHelpers.findClass("com.iMe.storage.data.locale.prefs.impl.ForkPremiumPreference", lpparam.classLoader);
-            // استخدم hook لتعديل متغير isPremium في الكائن
-            XposedHelpers.findAndHookMethod(userConfigClass3, "isPremium", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) {
-                       if (xSharedPreferences.xSharedPre.contains("prem")) {
-                    // قم بتعيين القيمة دائمًا إلى true
-                    param.setResult(true);
-                    }
-                }
-            });
+
             
             Class<?> userConfigClass4 = XposedHelpers.findClass("com.iMe.utils.helper.ForkPremiumHelper", lpparam.classLoader);
 
@@ -263,11 +221,11 @@ public static void readFeature(){
 
                   if (!lpparam.packageName.equals("com.skyGram.bestt")){  
 
-            
-            Class<?> userConfigClass2 = XposedHelpers.findClass("org.telegram.messenger.MessagesController", lpparam.classLoader);
-
+            if (loadClass.MessagesControllerClass == null) {
+                loadClass.MessagesControllerClass= XposedHelpers.findClass("org.telegram.messenger.MessagesController", lpparam.classLoader);
+            }
             // استخدم hook لتعديل متغير isPremium في الكائن
-            XposedHelpers.findAndHookMethod(userConfigClass2, "premiumFeaturesBlocked", new XC_MethodHook() {
+            XposedHelpers.findAndHookMethod(loadClass.MessagesControllerClass, "premiumFeaturesBlocked", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param)  {
                     // قم بتعيين القيمة دائمًا إلى true
@@ -277,9 +235,7 @@ public static void readFeature(){
                 }
             });
            }
-        } catch (Exception ex){
-        ErrorShow(ex.getMessage());
-    }
+
 
 
                               }

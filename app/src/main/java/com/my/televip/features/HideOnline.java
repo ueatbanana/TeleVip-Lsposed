@@ -10,12 +10,13 @@ import com.my.televip.obfuscate.AutomationResolver;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 public class HideOnline {
-
+    private static Method getUserConfigMethod;
+    private static Method getClientUserIdMethod;
+    private static  Field userIdField;
     public static void init() {
         // العثور على الكلاسات المطلوبة للمعاملات
         Class<?> connectionsManagerClass = XposedHelpers.findClassIfExists(
@@ -23,15 +24,15 @@ public class HideOnline {
                 lpparam.classLoader
         );
         if (connectionsManagerClass != null) {
-            loadClass.loadObj9();
-            XC_MethodHook hook = new AbstractMethodHook() {
+            AutomationResolver.loadParameter("4");
+            XposedHelpers.findMethodExact(connectionsManagerClass, AutomationResolver.resolve("ConnectionsManager", "sendRequestInternal", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("Parameter4"), new AbstractMethodHook() {
                 @Override
                 protected void beforeMethod(MethodHookParam param) {
                     try {
                         Class<?> tlAccountUpdateStatusClass;
                         if (lpparam.packageName.equals("com.tgconnect.android") || lpparam.packageName.equals("org.telegram.messenger.beta")) {
                             tlAccountUpdateStatusClass = XposedHelpers.findClassIfExists(
-                                    "org.telegram.tgnet.TLRPC$TL_account_updateStatus",
+                                    AutomationResolver.resolve("org.telegram.tgnet.TLRPC$TL_account_updateStatus"),
                                     param.thisObject.getClass().getClassLoader()
                             );
 
@@ -52,50 +53,57 @@ public class HideOnline {
                     }
 
                 }
-            };
-            XposedHelpers.findMethodExact(connectionsManagerClass, "sendRequestInternal", AutomationResolver.merge(AutomationResolver.resolveObject("obj9"), hook));
-            Class<?> profileActivityClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.ProfileActivity"), lpparam.classLoader);
-            Class<?> baseFragmentClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.ActionBar.BaseFragment"), lpparam.classLoader);
-            if (profileActivityClass != null) {
-                XposedHelpers.findAndHookMethod(profileActivityClass,
-                        "updateProfileData",
-                        boolean.class,
-                        new AbstractMethodHook() {
-                            @Override
-                            protected void afterMethod(MethodHookParam param) throws Throwable {
-                                final Object profileActivityInstance = param.thisObject;
-                                Method getUserConfigMethod = baseFragmentClass.getDeclaredMethod(AutomationResolver.resolve("BaseFragment","getUserConfig", AutomationResolver.ResolverType.Method));
-                                getUserConfigMethod.setAccessible(true);
-                                Object userConfig = getUserConfigMethod.invoke(profileActivityInstance);
+            }));
+            if (loadClass.ProfileActivityClass == null) {
+                loadClass.ProfileActivityClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.ProfileActivity"), lpparam.classLoader);
+            }
+            if (loadClass.BaseFragmentClass == null) {
+                loadClass.BaseFragmentClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.ActionBar.BaseFragment"), lpparam.classLoader);
+            }
+            if (loadClass.ProfileActivityClass != null && loadClass.BaseFragmentClass != null) {
 
-                                Method getClientUserIdMethod;
-                                if (userConfig != null) {
-                                    getClientUserIdMethod = userConfig.getClass().getDeclaredMethod(AutomationResolver.resolve("UserConfig","getClientUserId", AutomationResolver.ResolverType.Method));
+                    XposedHelpers.findAndHookMethod(loadClass.ProfileActivityClass,
+                            AutomationResolver.resolve("ProfileActivity", "updateProfileData", AutomationResolver.ResolverType.Method),
+                            AutomationResolver.merge(AutomationResolver.resolveObject("para8"),
+                            new AbstractMethodHook() {
+                                @Override
+                                protected void afterMethod(MethodHookParam param) throws Throwable {
+                                    final Object profileActivityInstance = param.thisObject;
+                                    if (getUserConfigMethod == null) {
+                                        getUserConfigMethod = loadClass.BaseFragmentClass.getDeclaredMethod(AutomationResolver.resolve("BaseFragment", "getUserConfig", AutomationResolver.ResolverType.Method));
+                                        getUserConfigMethod.setAccessible(true);
+                                    }
+                                    Object userConfig = getUserConfigMethod.invoke(profileActivityInstance);
 
-                                    getClientUserIdMethod.setAccessible(true);
-                                    //noinspection DataFlowIssue
-                                    long clientUserId = (long) getClientUserIdMethod.invoke(userConfig);
-                                    Field userIdField = profileActivityClass.getDeclaredField(AutomationResolver.resolve("ProfileActivity","userId", AutomationResolver.ResolverType.Field));
-                                    userIdField.setAccessible(true);
+                                    if (userConfig != null) {
+                                        if (getClientUserIdMethod == null) {
+                                            getClientUserIdMethod = userConfig.getClass().getDeclaredMethod(AutomationResolver.resolve("UserConfig", "getClientUserId", AutomationResolver.ResolverType.Method));
+                                            getClientUserIdMethod.setAccessible(true);
+                                        }
+                                        //noinspection DataFlowIssue
+                                        long clientUserId = (long) getClientUserIdMethod.invoke(userConfig);
+                                        if (userIdField == null) {
+                                            userIdField = loadClass.ProfileActivityClass.getDeclaredField(AutomationResolver.resolve("ProfileActivity", "userId", AutomationResolver.ResolverType.Field));
+                                            userIdField.setAccessible(true);
+                                        }
+                                        final long userId = userIdField.getLong(profileActivityInstance);
+                                        if (userId != 0 && userId == clientUserId) {
+                                            Object[] onlineTextViewArray = (Object[]) XposedHelpers.getObjectField(profileActivityInstance, AutomationResolver.resolve("ProfileActivity", "onlineTextView", AutomationResolver.ResolverType.Field));
 
-                                    final long userId = userIdField.getLong(profileActivityInstance);
-                                    if (userId != 0 && userId == clientUserId) {
-                                        Object[] onlineTextViewArray = (Object[]) XposedHelpers.getObjectField(profileActivityInstance, AutomationResolver.resolve("ProfileActivity","onlineTextView", AutomationResolver.ResolverType.Field));
+                                            if (onlineTextViewArray != null && onlineTextViewArray.length > 1) {
+                                                // الحصول على SimpleTextView[1]
+                                                Object simpleTextView1 = onlineTextViewArray[1];
 
-                                        if (onlineTextViewArray != null && onlineTextViewArray.length > 1) {
-                                            // الحصول على SimpleTextView[1]
-                                            Object simpleTextView1 = onlineTextViewArray[1];
-
-                                            if (simpleTextView1 != null) {
-                                                // استدعاء setText باستخدام LSPosed
-                                                XposedHelpers.callMethod(simpleTextView1, AutomationResolver.resolve("SimpleTextView","setText", AutomationResolver.ResolverType.Method), StrVip.onlinestatic);
+                                                if (simpleTextView1 != null) {
+                                                    // استدعاء setText باستخدام LSPosed
+                                                    XposedHelpers.callMethod(simpleTextView1, AutomationResolver.resolve("SimpleTextView", "setText", AutomationResolver.ResolverType.Method), StrVip.onlinestatic);
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-                );
+                            })
+                    );
             }
         }
     }

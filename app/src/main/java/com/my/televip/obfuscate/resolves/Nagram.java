@@ -16,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class TelegramWeb {
+public class Nagram {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -142,7 +142,7 @@ public class TelegramWeb {
         methodList.add(new MethodInfo("SQLitePreparedStatement", "bindInteger", "bindInteger"));
         methodList.add(new MethodInfo("SQLitePreparedStatement", "step", "step"));
         methodList.add(new MethodInfo("LongSparseArray", "get", "get"));
-        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$6", "lambda$onCreate$6"));
+        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$6", "lambda$onCreate$8"));
         methodList.add(new MethodInfo("BaseFragment", "getMessagesController", "getMessagesController"));
         methodList.add(new MethodInfo("MessagesController", "getChat", "getChat"));
         methodList.add(new MethodInfo("MessagesController", "getUser", "getUser"));
@@ -349,5 +349,6 @@ public class TelegramWeb {
             ParameterResolver.register("Parameter9", new Class[]{conClass});
         }
         public void loadParameter10() {}
+
     }
 }

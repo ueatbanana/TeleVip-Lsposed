@@ -259,8 +259,6 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                     @Override
                     protected void beforeMethod(MethodHookParam param) {
                         try {
-                            if (Configs.isAntiRecall())
-                            {
                                 Class<?> TL_updateDeleteMessages = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$TL_updateDeleteMessages"), classLoader);
                                 Class<?> TL_updateDeleteChannelMessages = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$TL_updateDeleteChannelMessages"), classLoader);
                                 CopyOnWriteArrayList<Object> updates = new CopyOnWriteArrayList<>(Utils.castList(param.args[0], Object.class));
@@ -271,11 +269,12 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                                         if (!item.getClass().equals(TL_updateDeleteChannelMessages) && !item.getClass().equals(TL_updateDeleteMessages))
                                             newUpdates.add(item);
 
+
                                         if (item.getClass().equals(TL_updateDeleteChannelMessages)) {
                                             TLRPC.TL_updateDeleteChannelMessages channelMessages = new TLRPC.TL_updateDeleteChannelMessages(item);
 
                                             Object dialogMessage = XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("MessagesController", "dialogMessage", AutomationResolver.ResolverType.Field));
-                                            //noinspection unchecked
+
                                             ArrayList<Object> dialogMessages = (ArrayList<Object>) XposedHelpers.callMethod(dialogMessage, AutomationResolver.resolve("LongSparseArray", "get", AutomationResolver.ResolverType.Method), new Class<?>[]{int.class}, -channelMessages.getChannelID());
                                             if (dialogMessages != null) {
                                                 for (final Object msgObj : dialogMessages) {
@@ -288,10 +287,9 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
 
                                             markMessagesDeletedForController(param.thisObject, -channelMessages.getChannelID(), channelMessages.getMessages());
                                         }
-
+                                      //  Utils.log("Class " + item.getClass());
                                         if (item.getClass().equals(TL_updateDeleteMessages)) {
                                             ArrayList<Integer> messages = new TLRPC.TL_updateDeleteMessages(item).getMessages();
-                                            //noinspection unchecked
                                             SparseArray<Object> dialogMessages = (SparseArray<Object>) XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("MessagesController", "dialogMessagesByIds", AutomationResolver.ResolverType.Field));
                                             for (int id : messages) {
                                                 Object msgObj = dialogMessages.get(id);
@@ -310,7 +308,7 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                                     }
                                     param.args[0] = newUpdates;
                                 }
-                            }
+
                         } catch (Throwable throwable) {
                             Utils.log(throwable);
                         }
@@ -370,9 +368,9 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                     if (deletedMessages.isEmpty())
                         param.setResult(null);
                     else {
-                        //noinspection unchecked
+
                         ((ArrayList<Integer>) param.args[1]).clear();
-                        //noinspection unchecked
+
                         ((ArrayList<Integer>) param.args[1]).addAll(deletedMessages);
                     }
                 }
@@ -427,9 +425,9 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                     if (deletedMessages.isEmpty())
                         param.setResult(null);
                     else {
-                        //noinspection unchecked
+
                         ((ArrayList<Integer>) param.args[2]).clear();
-                        //noinspection unchecked
+
                         ((ArrayList<Integer>) param.args[2]).addAll(deletedMessages);
                     }
                 }
@@ -497,9 +495,9 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                     if (deletedMessages.isEmpty())
                         param.setResult(null);
                     else {
-                        //noinspection unchecked
+
                         ((ArrayList<Integer>) param.args[2]).clear();
-                        //noinspection unchecked
+
                         ((ArrayList<Integer>) param.args[2]).addAll(deletedMessages);
                     }
                 }
