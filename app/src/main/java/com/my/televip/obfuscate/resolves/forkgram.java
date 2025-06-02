@@ -16,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class Telegram {
+public class forkgram {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class Telegram {
         classList.add(new ClassInfo("org.telegram.ui.Stories.StoriesController", "org.telegram.ui.Stories.StoriesController"));
         classList.add(new ClassInfo("org.telegram.tgnet.TLRPC$User", "org.telegram.tgnet.TLRPC$User"));
         classList.add(new ClassInfo("org.telegram.messenger.FileLoadOperation", "org.telegram.messenger.FileLoadOperation"));
-        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$13"));
+        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$15"));
         classList.add(new ClassInfo("org.telegram.messenger.DownloadController", "org.telegram.messenger.DownloadController"));
         classList.add(new ClassInfo("org.telegram.messenger.BaseController", "org.telegram.messenger.BaseController"));
         classList.add(new ClassInfo("org.telegram.messenger.UserObject", "org.telegram.messenger.UserObject"));
@@ -146,7 +146,7 @@ public class Telegram {
         methodList.add(new MethodInfo("SQLitePreparedStatement", "bindInteger", "bindInteger"));
         methodList.add(new MethodInfo("SQLitePreparedStatement", "step", "step"));
         methodList.add(new MethodInfo("LongSparseArray", "get", "get"));
-        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$6", "lambda$onCreate$6"));
+        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$6", "lambda$onCreate$7"));
         methodList.add(new MethodInfo("BaseFragment", "getMessagesController", "getMessagesController"));
         methodList.add(new MethodInfo("MessagesController", "getChat", "getChat"));
         methodList.add(new MethodInfo("MessagesController", "getUser", "getUser"));
@@ -209,7 +209,7 @@ public class Telegram {
         ParameterResolver.register("para6",new Class[]{boolean.class, boolean.class});
         ParameterResolver.register("para7",new Class[]{int.class, int.class, CharSequence.class});
         ParameterResolver.register("para8",new Class[]{boolean.class});
-        ParameterResolver.register("para9",new Class[]{long.class, java.util.ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
+        ParameterResolver.register("para9",new Class[]{long.class, ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
         ParameterResolver.register("para10",new Class[]{int.class, Object[].class});
     }
 
@@ -347,7 +347,7 @@ public class Telegram {
                 com.my.televip.loadClass.MessageObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessageObject"), lpparam.classLoader);
             }
                 Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
-                ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, java.lang.Runnable.class, java.lang.Runnable.class});
+                ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, Runnable.class, Runnable.class});
         }
         public void loadParameter8() {
                 Class<?> Userlass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$User"), lpparam.classLoader);
@@ -362,8 +362,8 @@ public class Telegram {
         public void loadParameter11() {
             Class<?> EncryptedChatClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$EncryptedChat"), lpparam.classLoader);
             Class<?> TLObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLObject"), lpparam.classLoader);
-            ParameterResolver.register("Parameter11", new Class[]{java.util.ArrayList.class,
-                    java.util.ArrayList.class,
+            ParameterResolver.register("Parameter11", new Class[]{ArrayList.class,
+                    ArrayList.class,
                     EncryptedChatClass, // الفئة المحددة
                     long.class,
                     boolean.class,

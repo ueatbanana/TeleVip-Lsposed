@@ -2,7 +2,6 @@ package com.my.televip;
 
 
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import android.content.Context;
@@ -32,29 +31,33 @@ import com.my.televip.features.FeatureManager;
 import com.my.televip.features.NEWAntiRecall;
 import com.my.televip.features.OtherFeatures;
 import com.my.televip.features.downloadSpeed;
+import com.my.televip.language.Language;
 import com.my.televip.obfuscate.AutomationResolver;
 import com.my.televip.virtuals.ActiveTheme;
 import com.my.televip.virtuals.EventType;
 
-public class MainHook extends StrVip implements IXposedHookLoadPackage {
-public static XC_LoadPackage.LoadPackageParam lpparam;
-private static Field itemsField;
-private static Constructor<?> itemConstructor;
+public class MainHook extends Language implements IXposedHookLoadPackage {
+    public static XC_LoadPackage.LoadPackageParam lpparam;
+    private static Field itemsField;
+    private static Constructor<?> itemConstructor;
     public static MediaPlayer mediaPlayer;
+    public static boolean playing=false;
+    public static int regr=0;
+    public static String audioUrl;
     private static @NonNull ArrayList<String> getArrayList() {
         ArrayList<String> list = new ArrayList<>();
-        list.add(noRead);
-        list.add(noRead2);
-        list.add(noStoryRead);
+        list.add(HideSeenUser);
+        list.add(HideSeenGroups);
+        list.add(HideStoryView);
         list.add(HideOnline);
         list.add(HidePhone);
-        list.add(hidestore);
-        list.add(NoTyping);
-        list.add(shmsdel);
+        list.add(DisableStories);
+        list.add(HideTyping);
+        list.add(ShowDeletedMessages);
         list.add(PreventMedia);
-        list.add(usefolow);
-        list.add(allowShare);
-        list.add(pre);
+        list.add(UnlockAllRestricted);
+        list.add(AllowSavingvideos);
+        list.add(TelegramPremium);
         return list;
     }
     @Override
@@ -110,7 +113,7 @@ private static Constructor<?> itemConstructor;
                                         AutomationResolver.resolve("ApplicationLoader", "applicationContext", AutomationResolver.ResolverType.Field)
                                 );
                             }
-                            Strck(loadClass.applicationContext);
+                            Language.init(loadClass.applicationContext);
                             Object newItem = itemConstructor.newInstance(13048, GhostMode, EventType.IconSettings());
 
                             // إضافة الكائن الجديد إلى القائمة
@@ -166,13 +169,13 @@ private static Constructor<?> itemConstructor;
                                     );
                                 }
                                 xSharedPreferences.SharedPre = applicationContext.getSharedPreferences(strTelevip, Activity.MODE_PRIVATE);
-                                readFeature();
+                                FeatureManager.readFeature();
                                 Object alertDialog = XposedHelpers.newInstance(alertDialogBuilderClass, applicationContext);
                                 // عرض رسالة أو تخصيص النافذة
-                                Strck(loadClass.applicationContext);
+                                Language.init(loadClass.applicationContext);
                                 ArrayList<String> list = getArrayList();
                                 final String[] items = list.toArray(new String[0]);
-                                XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setTitle", AutomationResolver.ResolverType.Method), strTitle);
+                                XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setTitle", AutomationResolver.ResolverType.Method), Ghost_Mode);
                                 // إنشاء تخطيط جديد
                                 LinearLayout layout = new LinearLayout(applicationContext);
                                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -181,20 +184,20 @@ private static Constructor<?> itemConstructor;
                                 final List<CheckBox> checkBoxes = new ArrayList<>();
                                 for (String item : items) {
                                     CheckBox checkBox = new CheckBox(applicationContext);
-                                    if (item.equals(pre) && FeatureManager.isTelePremium()) {
+                                    if (item.equals(TelegramPremium) && FeatureManager.isTelePremium()) {
                                         checkBox.setChecked(true);
-                                    } else if (item.equals(noRead) && FeatureManager.isHideSeenPrivate()) {
+                                    } else if (item.equals(HideSeenUser) && FeatureManager.isHideSeenPrivate()) {
                                         checkBox.setChecked(true);
-                                    } else if (item.equals(noRead2) && FeatureManager.isHideSeenGroup()) {
+                                    } else if (item.equals(HideSeenGroups) && FeatureManager.isHideSeenGroup()) {
                                         checkBox.setChecked(true);
                                     }
-                                    if (item.equals(NoTyping) && FeatureManager.isHideTyping()) {
+                                    if (item.equals(HideTyping) && FeatureManager.isHideTyping()) {
                                         checkBox.setChecked(true);
-                                    } else if (item.equals(noStoryRead) && FeatureManager.isNoStoryRead()) {
+                                    } else if (item.equals(HideStoryView) && FeatureManager.isNoStoryRead()) {
                                         checkBox.setChecked(true);
-                                    } else if (item.equals(usefolow) && FeatureManager.isUnlockChannelFeature()) {
+                                    } else if (item.equals(UnlockAllRestricted) && FeatureManager.isUnlockChannelFeature()) {
                                         checkBox.setChecked(true);
-                                    } else if (item.equals(allowShare) && FeatureManager.isAllowSaveToGallery()) {
+                                    } else if (item.equals(AllowSavingvideos) && FeatureManager.isAllowSaveToGallery()) {
                                         checkBox.setChecked(true);
                                     } else if (item.equals(HideOnline) && FeatureManager.isHideOnline()) {
                                         checkBox.setChecked(true);
@@ -262,13 +265,13 @@ private static Constructor<?> itemConstructor;
                                                 return true;
                                             });
                                         } catch (Exception ex) {
-                                            ErrorShow(ex.getMessage());
+                                            Utils.log(ex.getMessage());
                                         }
                                     } else if (item.equals(HidePhone) && FeatureManager.isHidePhone()) {
                                         checkBox.setChecked(true);
-                                    } else if (item.equals(shmsdel) && FeatureManager.ishowDeletedMessages()) {
+                                    } else if (item.equals(ShowDeletedMessages) && FeatureManager.ishowDeletedMessages()) {
                                         checkBox.setChecked(true);
-                                    } else if (item.equals(hidestore) && FeatureManager.isDisableStories()) {
+                                    } else if (item.equals(DisableStories) && FeatureManager.isDisableStories()) {
                                         checkBox.setChecked(true);
                                     }
 
@@ -323,10 +326,10 @@ private static Constructor<?> itemConstructor;
                                 }
                                 // إعداد الزر الموجب
                                 XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setPositiveButton", AutomationResolver.ResolverType.Method),
-                                        btnsave, onDoneListener
+                                        Save, onDoneListener
                                 );
                                 XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setNegativeButton", AutomationResolver.ResolverType.Method),
-                                        chena, onCnelListener
+                                        DeveloperChannel, onCnelListener
                                 );
 /*
 XposedHelpers.callMethod(alertDialog, "setNeutralButton",
@@ -364,35 +367,11 @@ XposedHelpers.callMethod(alertDialog, "setNeutralButton",
             }
         }
         NEWAntiRecall.initUI(lpparam.classLoader);
-        readFeature();
+        FeatureManager.readFeature();
         downloadSpeed.init();
         OtherFeatures.init();
 
 
-                /*
-
-
-            case "com.iMe.android":
-            case "com.iMe.android.web":
-                teleim.Start(lpparam);
-                break;
-
-
-            case "com.exteragram.messenger":
-                telexe.Start(lpparam);
-                break;
-            case "tw.nekomimi.nekogram":
-                telenk.Start(lpparam);
-                break;
-            case "org.forkclient.messenger.beta":
-            case "org.forkgram.messenger":
-                telefo.Start(lpparam);
-                break;
-
-            default:
-        }
-
-                 */
 
     }
 

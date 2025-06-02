@@ -16,9 +16,9 @@ import android.widget.Toast;
 import com.my.televip.AlertDialog.onClickDialog;
 import com.my.televip.ClientChecker;
 import com.my.televip.MainHook;
-import com.my.televip.StrVip;
 import com.my.televip.Utils;
 import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.language.Language;
 import com.my.televip.loadClass;
 import com.my.televip.obfuscate.AutomationResolver;
 import com.my.televip.virtuals.ActiveTheme;
@@ -31,7 +31,7 @@ import java.lang.reflect.Proxy;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-public class OtherFeatures extends StrVip {
+public class OtherFeatures extends Language {
 private static final Class<?> longClass = Long.class;
 private static Method chatIdObject;
 private static Method getMessagesControllerMethod;
@@ -244,13 +244,12 @@ private static  Method getUserNameMethod;
                             }
                                 int drawableResource = XposedHelpers.getStaticIntField(loadClass.drawableClass, "msg_go_up");
 
-                                if (!lpparam.packageName.equals("com.skyGram.bestt") && !lpparam.packageName.equals("uz.unnarsx.cherrygram") &&
-                                        !lpparam.packageName.equals("com.iMe.android") && !lpparam.packageName.equals("com.iMe.android.web") && !ClientChecker.check(ClientChecker.ClientType.TelegramPlus) && !lpparam.packageName.equals("com.xplus.messenger") && !lpparam.packageName.equals("org.forkgram.messenger") && !lpparam.packageName.equals("org.forkclient.messenger.beta")) {
-                                    lazilyAddSubItemMethod.invoke(headerItem, 70, drawableResource, onemsg);
+                                if (!ClientChecker.check(ClientChecker.ClientType.Cherrygram) && !ClientChecker.check(ClientChecker.ClientType.iMe) && !ClientChecker.check(ClientChecker.ClientType.iMeWeb) && !ClientChecker.check(ClientChecker.ClientType.TelegramPlus) && !ClientChecker.check(ClientChecker.ClientType.XPlus) && !lpparam.packageName.equals("org.forkgram.messenger") && !lpparam.packageName.equals("org.forkclient.messenger.beta")) {
+                                    lazilyAddSubItemMethod.invoke(headerItem, 70, drawableResource, ToTheBeginning);
                                 }
                                 drawableResource = XposedHelpers.getStaticIntField(loadClass.drawableClass, "player_new_order");
                                 //noinspection JavaReflectionInvocation
-                                lazilyAddSubItemMethod.invoke(headerItem, 71, drawableResource, tothmsg);
+                                lazilyAddSubItemMethod.invoke(headerItem, 71, drawableResource, ToTheMessage);
 
                         }
 
@@ -281,7 +280,7 @@ private static  Method getUserNameMethod;
                                                 getResourceProvider
                                         );
                                         if (alertDialog != null) {
-                                            XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setTitle", AutomationResolver.ResolverType.Method), inpMsg);
+                                            XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setTitle", AutomationResolver.ResolverType.Method), InputMessageId);
                                             // إنشاء EditText مع تصميم جميل
                                             final EditText editText = new EditText(applicationContext);
                                             editText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -353,11 +352,11 @@ private static  Method getUserNameMethod;
                                                         }
                                                 );
                                             }
-                                            XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setPositiveButton", AutomationResolver.ResolverType.Method), serc, onDoneListener
+                                            XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setPositiveButton", AutomationResolver.ResolverType.Method), Done, onDoneListener
                                             );
 
                                             XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setNegativeButton", AutomationResolver.ResolverType.Method),
-                                                    syno,
+                                                    Cancel,
                                                     onCnelListener
                                             );
 
@@ -447,7 +446,7 @@ private static  Method getUserNameMethod;
                                                 }
                                                 String userName = (String) getUserNameMethod.invoke(null, user);
                                                 if (userName != null) {
-                                                    String user_name = copname + userName + copname2;
+                                                    String user_name = Copied + userName + ToTheClipboard;
                                                     if (loadClass.applicationContext != null) {
                                                         ((ClipboardManager) loadClass.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("clipboard", userName));
                                                         Toast.makeText(loadClass.applicationContext, user_name, Toast.LENGTH_LONG).show();

@@ -1,8 +1,8 @@
 package com.my.televip.features;
 
 import static com.my.televip.MainHook.lpparam;
+import static com.my.televip.language.Language.UserOffline;
 
-import com.my.televip.StrVip;
 import com.my.televip.base.AbstractMethodHook;
 import com.my.televip.loadClass;
 import com.my.televip.obfuscate.AutomationResolver;
@@ -96,7 +96,7 @@ public class HideOnline {
 
                                                 if (simpleTextView1 != null) {
                                                     // استدعاء setText باستخدام LSPosed
-                                                    XposedHelpers.callMethod(simpleTextView1, AutomationResolver.resolve("SimpleTextView", "setText", AutomationResolver.ResolverType.Method), StrVip.onlinestatic);
+                                                    XposedHelpers.callMethod(simpleTextView1, AutomationResolver.resolve("SimpleTextView", "setText", AutomationResolver.ResolverType.Method), UserOffline);
                                                 }
                                             }
                                         }

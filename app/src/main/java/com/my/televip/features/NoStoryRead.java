@@ -3,11 +3,7 @@ package com.my.televip.features;
 import static com.my.televip.MainHook.lpparam;
 
 import com.my.televip.base.AbstractMethodHook;
-import com.my.televip.loadClass;
 import com.my.televip.obfuscate.AutomationResolver;
-import com.my.televip.xSharedPreferences;
-
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
 public class NoStoryRead {

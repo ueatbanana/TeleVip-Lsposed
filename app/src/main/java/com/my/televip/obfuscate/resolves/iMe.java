@@ -71,6 +71,9 @@ public class iMe {
         classList.add(new ClassInfo("org.telegram.messenger.UserObject", "org.telegram.messenger.UserObject"));
         classList.add(new ClassInfo("org.telegram.ui.Adapters.DrawerLayoutAdapter$Item", "org.telegram.ui.Adapters.DrawerLayoutAdapter$Item"));
         classList.add(new ClassInfo("org.telegram.tgnet.TLRPC$TL_account_updateStatus", "org.telegram.tgnet.TLRPC$TL_account_updateStatus"));
+        classList.add(new ClassInfo("org.telegram.tgnet.TLRPC$EncryptedChat", "org.telegram.tgnet.TLRPC$EncryptedChat"));
+        classList.add(new ClassInfo("org.telegram.tgnet.TLObject", "org.telegram.tgnet.TLObject"));
+        classList.add(new ClassInfo("org.telegram.messenger.NotificationCenter", "org.telegram.messenger.NotificationCenter"));
 
         fieldList.add(new FieldInfo("UserConfig", "selectedAccount", "selectedAccount"));
         fieldList.add(new FieldInfo("TLRPC$User", "id", "id"));
@@ -108,6 +111,7 @@ public class iMe {
         fieldList.add(new FieldInfo("ProfileActivity", "nameTextView", "nameTextView"));
         fieldList.add(new FieldInfo("UserConfig", "phone", "phone"));
         fieldList.add(new FieldInfo("LaunchActivity", "drawerLayoutContainer", "drawerLayoutContainer"));
+        fieldList.add(new FieldInfo("NotificationCenter", "messagesDeleted", "messagesDeleted"));
 
         methodList.add(new MethodInfo("NotificationCenter", "postNotificationName", "postNotificationName"));
         methodList.add(new MethodInfo("MessagesStorage", "markMessagesAsDeletedInternal", "markMessagesAsDeletedInternal"));
@@ -193,6 +197,9 @@ public class iMe {
         methodList.add(new MethodInfo("SecretMediaViewer", "closePhoto", "closePhoto"));
         methodList.add(new MethodInfo("UserConfig", "isPremium", "isPremium"));
         methodList.add(new MethodInfo("MessagesController", "isChatNoForwards", "isChatNoForwards"));
+        methodList.add(new MethodInfo("MessagesController", "deleteMessages", "deleteMessages"));
+        methodList.add(new MethodInfo("MessagesStorage", "markMessagesAsDeleted", "markMessagesAsDeleted"));
+        methodList.add(new MethodInfo("NotificationCenter", "postNotificationName", "postNotificationName"));
 
         ParameterResolver.register("para1",new Class[]{Long.class});
         ParameterResolver.register("para2",new Class[]{int.class, int.class, CharSequence.class});
@@ -202,6 +209,8 @@ public class iMe {
         ParameterResolver.register("para6",new Class[]{boolean.class, boolean.class});
         ParameterResolver.register("para7",new Class[]{int.class, int.class, CharSequence.class});
         ParameterResolver.register("para8",new Class[]{boolean.class});
+        ParameterResolver.register("para9",new Class[]{long.class, java.util.ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
+        ParameterResolver.register("para10",new Class[]{int.class, Object[].class});
     }
 
     public static class ClassResolver
@@ -349,5 +358,22 @@ public class iMe {
                 ParameterResolver.register("Parameter9", new Class[]{conClass});
         }
         public void loadParameter10() {}
+
+        public void loadParameter11() {
+            Class<?> EncryptedChatClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$EncryptedChat"), lpparam.classLoader);
+            Class<?> TLObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLObject"), lpparam.classLoader);
+            ParameterResolver.register("Parameter11", new Class[]{java.util.ArrayList.class,
+                    java.util.ArrayList.class,
+                    EncryptedChatClass, // الفئة المحددة
+                    long.class,
+                    boolean.class,
+                    int.class,
+                    boolean.class,
+                    long.class,
+                    TLObjectClass,
+                    int.class,
+                    boolean.class,
+                    int.class,java.lang.Runnable.class,java.lang.Runnable.class});
+        }
     }
 }

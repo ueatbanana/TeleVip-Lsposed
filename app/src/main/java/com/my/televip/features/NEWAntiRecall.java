@@ -1,5 +1,8 @@
 package com.my.televip.features;
 
+import static com.my.televip.MainHook.lpparam;
+
+
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -22,11 +25,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-import com.my.televip.StrVip;
 import com.my.televip.Utils;
 import com.my.televip.base.AbstractMethodHook;
 import com.my.televip.configs.Configs;
-//import com.my.televip.language.Language;
+import com.my.televip.language.Language;
+import com.my.televip.loadClass;
 import com.my.televip.obfuscate.AutomationResolver;
 import com.my.televip.structs.DeletedMessageInfo;
 import com.my.televip.utils.FieldUtils;
@@ -37,7 +40,7 @@ import com.my.televip.virtuals.Theme;
 import com.my.televip.virtuals.UserConfig;
 import com.my.televip.virtuals.nekogram.NekoChatMessageCell;
 
-public class NEWAntiRecall extends com.my.televip.StrVip {
+public class NEWAntiRecall extends Language {
     private static long lastVisibleTime = -1;
     private static MessageObject currentMessageObject;
     private static final Handler storage = new Handler(makeLooper("Storage"));
@@ -47,6 +50,10 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
     private static final CopyOnWriteArraySet<DeletedMessageInfo> shouldDeletedMessageInfo2 = new CopyOnWriteArraySet<>();
 
     public static final int FLAG_DELETED = 1 << 31;
+
+    private static boolean isDeleteMessage = false;
+
+    public static final boolean DEBUG_MODE=false;
 
     public static Looper makeLooper(String str) {
         HandlerThread handlerThread = new HandlerThread("TeleVip - " + str, Process.THREAD_PRIORITY_DISPLAY);
@@ -178,10 +185,9 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                 @Override
                 protected void afterMethod(MethodHookParam param) {
                     try {
-                        if (Configs.isAntiRecall()) {
                             currentMessageObject = new MessageObject(XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("ChatMessageCell", "currentMessageObject", AutomationResolver.ResolverType.Field)));
                             lastVisibleTime = System.currentTimeMillis();
-                            String text = Configs.getAntiRecallText().isEmpty() ? (delmsg): Configs.getAntiRecallText();
+                            String text = Configs.getAntiRecallText().isEmpty() ? (deleted): Configs.getAntiRecallText();
                             Object msgObj = param.args[0];
                             if (msgObj == null)
                                 return;
@@ -228,7 +234,6 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                                 TextPaint paint = Theme.getTextPaint(classLoader);
                                 paint.setShadowLayer(0, 0, 0, Color.WHITE);
                             }
-                        }
                     } catch (Throwable throwable) {
                         Utils.log(throwable);
                     }
@@ -287,8 +292,8 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
 
                                             markMessagesDeletedForController(param.thisObject, -channelMessages.getChannelID(), channelMessages.getMessages());
                                         }
-                                      //  Utils.log("Class " + item.getClass());
                                         if (item.getClass().equals(TL_updateDeleteMessages)) {
+
                                             ArrayList<Integer> messages = new TLRPC.TL_updateDeleteMessages(item).getMessages();
                                             SparseArray<Object> dialogMessages = (SparseArray<Object>) XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("MessagesController", "dialogMessagesByIds", AutomationResolver.ResolverType.Field));
                                             for (int id : messages) {
@@ -303,7 +308,7 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                                             markMessagesDeletedForController(param.thisObject, DeletedMessageInfo.NOT_CHANNEL, messages);
                                         }
 
-                                        if (StrVip.DEBUG_MODE && (item.getClass().equals(TL_updateDeleteMessages) || item.getClass().equals(TL_updateDeleteChannelMessages)))
+                                        if (DEBUG_MODE && (item.getClass().equals(TL_updateDeleteMessages) || item.getClass().equals(TL_updateDeleteChannelMessages)))
                                             Utils.log("Protected message! event: " + item.getClass());
                                     }
                                     param.args[0] = newUpdates;
@@ -329,7 +334,6 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
         XposedHelpers.findAndHookMethod(messagesStorage, AutomationResolver.resolve("MessagesStorage", "markMessagesAsDeletedInternal", AutomationResolver.ResolverType.Method), long.class, ArrayList.class, boolean.class, int.class, int.class, new AbstractMethodHook() {
             @Override
             protected void beforeMethod(MethodHookParam param) {
-                if (Configs.isAntiRecall()) {
                     long dialogId = (long) param.args[0];
                     if (currentMessageObject != null && (System.currentTimeMillis() - lastVisibleTime) < 4000) {
                         long objectId = currentMessageObject.getDialogId();
@@ -373,7 +377,6 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
 
                         ((ArrayList<Integer>) param.args[1]).addAll(deletedMessages);
                     }
-                }
             }
         });
 
@@ -519,6 +522,54 @@ public class NEWAntiRecall extends com.my.televip.StrVip {
                         param.setResult(null);
                 }
             });
+
+        if (loadClass.MessagesControllerClass == null){
+            loadClass.MessagesControllerClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessagesController"), lpparam.classLoader);
+        }
+        if (loadClass.MessagesControllerClass  != null) {
+            AutomationResolver.loadParameter("11");
+            XposedHelpers.findAndHookMethod(
+                    loadClass.MessagesControllerClass,
+                    AutomationResolver.resolve("MessagesController","deleteMessages", AutomationResolver.ResolverType.Method),
+                    AutomationResolver.merge(AutomationResolver.resolveObject("Parameter11"),
+                    new AbstractMethodHook() {
+                        @Override
+                        protected void beforeMethod(MethodHookParam param) {
+                            isDeleteMessage = true;
+                        }
+                    }
+            ));
+        }
+        XposedHelpers.findAndHookMethod(
+                    messagesStorage,
+                AutomationResolver.resolve("MessagesStorage","markMessagesAsDeleted", AutomationResolver.ResolverType.Method),
+                AutomationResolver.merge(AutomationResolver.resolveObject("para9"),
+                    new AbstractMethodHook() {
+                        @Override
+                        protected void beforeMethod(MethodHookParam param){
+                            if (!isDeleteMessage) {
+                                param.setResult(null);
+                            }
+                        }
+                    }
+            ));
+        Class<?> NotificationCenterClass = XposedHelpers.findClass(AutomationResolver.resolve("org.telegram.messenger.NotificationCenter"), lpparam.classLoader);
+        XposedHelpers.findAndHookMethod(NotificationCenterClass, AutomationResolver.resolve("NotificationCenter","postNotificationName", AutomationResolver.ResolverType.Method),AutomationResolver.merge(AutomationResolver.resolveObject("para10"), new AbstractMethodHook() {
+            @Override
+            protected void beforeMethod(MethodHookParam param){
+                if (!isDeleteMessage) {
+                    int id = (int) param.args[0];
+                    int messagesDeleted = XposedHelpers.getStaticIntField(NotificationCenterClass, AutomationResolver.resolve("NotificationCenter","messagesDeleted", AutomationResolver.ResolverType.Field));
+                    if (id == messagesDeleted) {
+                        param.setResult(null);
+                    }
+                }
+            }
+            @Override
+            protected void afterMethod(MethodHookParam param){
+                isDeleteMessage =false;
+            }
+        }));
     }
     public static void initAutoDownload(ClassLoader classLoader) {
         Class<?> downloadController = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.DownloadController"), classLoader);

@@ -6,7 +6,6 @@ import static com.my.televip.MainHook.lpparam;
 import com.my.televip.ClientChecker;
 import com.my.televip.base.AbstractMethodHook;
 import com.my.televip.obfuscate.AutomationResolver;
-import com.my.televip.xSharedPreferences;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -24,7 +23,7 @@ if ( userConfigClass != null) {
         }
     });
 }
-if (ClientChecker.check(ClientChecker.ClientType.iMe)){
+if (ClientChecker.check(ClientChecker.ClientType.iMe) || ClientChecker.check(ClientChecker.ClientType.iMeWeb)){
     Class<?> ForkPremiumPreferencClass = XposedHelpers.findClassIfExists("com.iMe.storage.data.locale.prefs.impl.ForkPremiumPreference", lpparam.classLoader);
     XposedHelpers.findAndHookMethod(ForkPremiumPreferencClass, "isPremium", new AbstractMethodHook() {
         @Override

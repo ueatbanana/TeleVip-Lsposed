@@ -11,4 +11,5 @@ public interface LoaderParameter {
     void loadParameter8();
     void loadParameter9();
     void loadParameter10();
+    void loadParameter11();
 }

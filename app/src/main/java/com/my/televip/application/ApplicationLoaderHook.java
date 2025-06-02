@@ -11,9 +11,10 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import com.my.televip.Utils;
 import com.my.televip.configs.ConfigManager;
+import com.my.televip.language.Language;
 import com.my.televip.obfuscate.AutomationResolver;
 
-public class ApplicationLoaderHook extends com.my.televip.StrVip {
+public class ApplicationLoaderHook extends Language {
     private static boolean initialized = false;
 
     public static void init(ClassLoader loader) {

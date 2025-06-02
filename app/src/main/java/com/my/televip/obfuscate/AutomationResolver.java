@@ -15,7 +15,10 @@ import com.my.televip.obfuscate.resolves.TelegramBeta;
 import com.my.televip.obfuscate.resolves.TelegramPlus;
 import com.my.televip.obfuscate.resolves.TelegramWeb;
 import com.my.televip.obfuscate.resolves.XPlus;
+import com.my.televip.obfuscate.resolves.forkgram;
+import com.my.televip.obfuscate.resolves.forkgramBeta;
 import com.my.televip.obfuscate.resolves.iMe;
+import com.my.televip.obfuscate.resolves.iMeWeb;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +74,18 @@ public class AutomationResolver {
          {
              if (iMe.ClassResolver.has(className))
                  return iMe.ClassResolver.resolve(className);
+         }else if (ClientChecker.check(ClientChecker.ClientType.iMeWeb, pkgName))
+         {
+             if (iMeWeb.ClassResolver.has(className))
+                 return iMeWeb.ClassResolver.resolve(className);
+         }else if (ClientChecker.check(ClientChecker.ClientType.forkgram, pkgName))
+         {
+             if (forkgram.ClassResolver.has(className))
+                 return forkgram.ClassResolver.resolve(className);
+         }else if (ClientChecker.check(ClientChecker.ClientType.forkgramBeta, pkgName))
+         {
+             if (forkgramBeta.ClassResolver.has(className))
+                 return forkgramBeta.ClassResolver.resolve(className);
          }
 
         return className;
@@ -132,6 +147,21 @@ public class AutomationResolver {
        {
            if (iMe.ParameterResolver.has(name)) {
                return iMe.ParameterResolver.resolve(name);
+           }
+       }else if (ClientChecker.check(ClientChecker.ClientType.iMeWeb, pkgName))
+       {
+           if (iMeWeb.ParameterResolver.has(name)) {
+               return iMeWeb.ParameterResolver.resolve(name);
+           }
+       }else if (ClientChecker.check(ClientChecker.ClientType.forkgram, pkgName))
+       {
+           if (forkgram.ParameterResolver.has(name)) {
+               return forkgram.ParameterResolver.resolve(name);
+           }
+       }else if (ClientChecker.check(ClientChecker.ClientType.forkgramBeta, pkgName))
+       {
+           if (forkgramBeta.ParameterResolver.has(name)) {
+               return forkgramBeta.ParameterResolver.resolve(name);
            }
        }
         return null;
@@ -271,6 +301,42 @@ public class AutomationResolver {
                 if (iMe.MethodResolver.has(className, name))
                     return iMe.MethodResolver.resolve(className, name);
             }
+        }else if (ClientChecker.check(ClientChecker.ClientType.iMeWeb, pkgName))
+        {
+            if (type == ResolverType.Field)
+            {
+                if (iMeWeb.FieldResolver.has(className, name))
+                    return iMeWeb.FieldResolver.resolve(className, name);
+            }
+            else if (type == ResolverType.Method)
+            {
+                if (iMeWeb.MethodResolver.has(className, name))
+                    return iMeWeb.MethodResolver.resolve(className, name);
+            }
+        }else if (ClientChecker.check(ClientChecker.ClientType.forkgram, pkgName))
+        {
+            if (type == ResolverType.Field)
+            {
+                if (forkgram.FieldResolver.has(className, name))
+                    return forkgram.FieldResolver.resolve(className, name);
+            }
+            else if (type == ResolverType.Method)
+            {
+                if (forkgram.MethodResolver.has(className, name))
+                    return forkgram.MethodResolver.resolve(className, name);
+            }
+        }else if (ClientChecker.check(ClientChecker.ClientType.forkgramBeta, pkgName))
+        {
+            if (type == ResolverType.Field)
+            {
+                if (forkgramBeta.FieldResolver.has(className, name))
+                    return forkgramBeta.FieldResolver.resolve(className, name);
+            }
+            else if (type == ResolverType.Method)
+            {
+                if (forkgramBeta.MethodResolver.has(className, name))
+                    return forkgramBeta.MethodResolver.resolve(className, name);
+            }
         }
         return name;
     }
@@ -310,6 +376,9 @@ public static void loadParameter(String name){
             Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.NagramX), new NagramX.loadParameter());
             Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.XPlus), new XPlus.loadParameter());
             Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.iMe), new iMe.loadParameter());
+            Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.iMeWeb), new iMeWeb.loadParameter());
+            Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.forkgram), new forkgram.loadParameter());
+            Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.forkgramBeta), new forkgramBeta.loadParameter());
         }
         if (!Loaders.isEmpty()) {
             LoaderParameter loader = Loaders.get(Utils.pkgName);
@@ -344,6 +413,9 @@ public static void loadParameter(String name){
                         break;
                     case "10":
                         loader.loadParameter10();
+                        break;
+                    case "11":
+                        loader.loadParameter11();
                         break;
                 }
         }

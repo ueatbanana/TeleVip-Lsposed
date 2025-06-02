@@ -7,19 +7,19 @@ import android.widget.EditText;
 
 import com.my.televip.ClientChecker;
 import com.my.televip.MainHook;
-import com.my.televip.StrVip;
+import com.my.televip.features.FeatureManager;
+import com.my.televip.language.Language;
 import com.my.televip.obfuscate.AutomationResolver;
 import com.my.televip.xSharedPreferences;
 
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-public class onClickDialog extends StrVip {
+public class onClickDialog extends Language {
     public static void onClickOpenUrl(Context applicationContext, XC_MethodHook.MethodHookParam param){
-        Object drawerLayoutContainer = null;
+        Object drawerLayoutContainer;
         if (ClientChecker.check(ClientChecker.ClientType.NagramX)){
             drawerLayoutContainer = XposedHelpers.getObjectField(param.args[0], AutomationResolver.resolve("LaunchActivity", "drawerLayoutContainer", AutomationResolver.ResolverType.Field));
         }else {
@@ -39,19 +39,19 @@ public class onClickDialog extends StrVip {
             for (int i = 0; i < checkBoxes.size(); i++) {
                 CheckBox checkBox = checkBoxes.get(i);
                 if (checkBox.isChecked()) {
-                    if (checkBox.getText().toString().equals(pre)) {
+                    if (checkBox.getText().toString().equals(TelegramPremium)) {
                         xSharedPreferences.SharedPre.edit().putString("prem", "true").apply();
-                    } else if (checkBox.getText().toString().equals(noRead)) {
+                    } else if (checkBox.getText().toString().equals(HideSeenUser)) {
                         xSharedPreferences.SharedPre.edit().putString("noRead", "true").apply();
-                    } else if (checkBox.getText().toString().equals(noRead2)) {
+                    } else if (checkBox.getText().toString().equals(HideSeenGroups)) {
                         xSharedPreferences.SharedPre.edit().putString("noRead2", "true").apply();
-                    } else if (checkBox.getText().toString().equals(NoTyping)) {
+                    } else if (checkBox.getText().toString().equals(HideTyping)) {
                         xSharedPreferences.SharedPre.edit().putString("NoTyping", "true").apply();
-                    } else if (checkBox.getText().toString().equals(noStoryRead)) {
+                    } else if (checkBox.getText().toString().equals(HideStoryView)) {
                         xSharedPreferences.SharedPre.edit().putString("noStoryRead", "true").apply();
-                    } else if (checkBox.getText().toString().equals(usefolow)) {
+                    } else if (checkBox.getText().toString().equals(UnlockAllRestricted)) {
                         xSharedPreferences.SharedPre.edit().putString("usefolow", "true").apply();
-                    } else if (checkBox.getText().toString().equals(allowShare)) {
+                    } else if (checkBox.getText().toString().equals(AllowSavingvideos)) {
                         xSharedPreferences.SharedPre.edit().putString("allowShare", "true").apply();
                     } else if (checkBox.getText().toString().equals(HideOnline)) {
                         xSharedPreferences.SharedPre.edit().putString("HideOnline", "true").apply();
@@ -59,25 +59,25 @@ public class onClickDialog extends StrVip {
                         xSharedPreferences.SharedPre.edit().putString("PreventMedia", "true").apply();
                     } else if (checkBox.getText().toString().equals(HidePhone)) {
                         xSharedPreferences.SharedPre.edit().putString("HidePhone", "true").apply();
-                    } else if (checkBox.getText().toString().equals(shmsdel)) {
+                    } else if (checkBox.getText().toString().equals(ShowDeletedMessages)) {
                         xSharedPreferences.SharedPre.edit().putString("shmsdel", "true").apply();
-                    } else if (checkBox.getText().toString().equals(hidestore)) {
+                    } else if (checkBox.getText().toString().equals(DisableStories)) {
                         xSharedPreferences.SharedPre.edit().putString("hidestore", "true").apply();
                     }
                 } else {
-                    if (checkBox.getText().toString().equals(pre)) {
+                    if (checkBox.getText().toString().equals(TelegramPremium)) {
                         xSharedPreferences.SharedPre.edit().remove("prem").apply();
-                    } else if (checkBox.getText().toString().equals(noRead)) {
+                    } else if (checkBox.getText().toString().equals(HideSeenUser)) {
                         xSharedPreferences.SharedPre.edit().remove("noRead").apply();
-                    } else if (checkBox.getText().toString().equals(noRead2)) {
+                    } else if (checkBox.getText().toString().equals(HideSeenGroups)) {
                         xSharedPreferences.SharedPre.edit().remove("noRead2").apply();
-                    } else if (checkBox.getText().toString().equals(NoTyping)) {
+                    } else if (checkBox.getText().toString().equals(HideTyping)) {
                         xSharedPreferences.SharedPre.edit().remove("NoTyping").apply();
-                    } else if (checkBox.getText().toString().equals(noStoryRead)) {
+                    } else if (checkBox.getText().toString().equals(HideStoryView)) {
                         xSharedPreferences.SharedPre.edit().remove("noStoryRead").apply();
-                    } else if (checkBox.getText().toString().equals(usefolow)) {
+                    } else if (checkBox.getText().toString().equals(UnlockAllRestricted)) {
                         xSharedPreferences.SharedPre.edit().remove("usefolow").apply();
-                    } else if (checkBox.getText().toString().equals(allowShare)) {
+                    } else if (checkBox.getText().toString().equals(AllowSavingvideos)) {
                         xSharedPreferences.SharedPre.edit().remove("allowShare").apply();
                     } else if (checkBox.getText().toString().equals(HideOnline)) {
                         xSharedPreferences.SharedPre.edit().remove("HideOnline").apply();
@@ -85,9 +85,9 @@ public class onClickDialog extends StrVip {
                         xSharedPreferences.SharedPre.edit().remove("PreventMedia").apply();
                     } else if (checkBox.getText().toString().equals(HidePhone)) {
                         xSharedPreferences.SharedPre.edit().remove("HidePhone").apply();
-                    } else if (checkBox.getText().toString().equals(shmsdel)) {
+                    } else if (checkBox.getText().toString().equals(ShowDeletedMessages)) {
                         xSharedPreferences.SharedPre.edit().remove("shmsdel").apply();
-                    } else if (checkBox.getText().toString().equals(hidestore)) {
+                    } else if (checkBox.getText().toString().equals(DisableStories)) {
                         xSharedPreferences.SharedPre.edit().remove("hidestore").apply();
                     }
                 }
@@ -96,7 +96,7 @@ public class onClickDialog extends StrVip {
             // غلق الـ AlertDialog بعد التحقق
           //  XposedHelpers.callMethod(dialog, "dismiss");
 
-        StrVip.readFeature();
+        FeatureManager.readFeature();
     }
     public static void onClickToMessageId(EditText editText, Object chatActivity){
         String inputText = editText.getText().toString().trim();

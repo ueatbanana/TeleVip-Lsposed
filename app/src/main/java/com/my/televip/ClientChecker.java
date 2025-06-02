@@ -30,7 +30,10 @@ public class ClientChecker {
         TelegramBeta("org.telegram.messenger.beta"),
         NagramX("nu.gpu.nagram"),
         XPlus("com.xplus.messenger"),
-        iMe("com.iMe.android");
+        iMe("com.iMe.android"),
+        iMeWeb("com.iMe.android.web"),
+        forkgram("org.forkgram.messenger"),
+        forkgramBeta("org.forkclient.messenger.beta");
 
         final String[] packageNames;
 

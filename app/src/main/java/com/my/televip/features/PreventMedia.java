@@ -8,7 +8,6 @@ import com.my.televip.obfuscate.AutomationResolver;
 
 import java.lang.reflect.Field;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
 public class PreventMedia {
