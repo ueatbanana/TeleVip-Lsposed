@@ -33,7 +33,8 @@ public class ClientChecker {
         iMe("com.iMe.android"),
         iMeWeb("com.iMe.android.web"),
         forkgram("org.forkgram.messenger"),
-        forkgramBeta("org.forkclient.messenger.beta");
+        forkgramBeta("org.forkclient.messenger.beta"),
+        Teegra("org.open.telegram.market");
 
         final String[] packageNames;
 

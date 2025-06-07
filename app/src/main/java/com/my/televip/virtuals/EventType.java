@@ -34,13 +34,13 @@ public class EventType {
             }
         }else {
             if (eventType == 0) {
-                drawableResource = 0x7f0807ae;
+                drawableResource = 0x7f0807bf;
             } else if (eventType == 1) {
-                drawableResource = 0x7f0807ac;
+                drawableResource = 0x7f0807bd;
             } else if (eventType == 2) {
-                drawableResource = 0x7f0807ad;
+                drawableResource = 0x7f0807be;
             } else {
-                drawableResource = 0x7f0807af;
+                drawableResource = 0x7f0807c0;
             }
         }
         return drawableResource;

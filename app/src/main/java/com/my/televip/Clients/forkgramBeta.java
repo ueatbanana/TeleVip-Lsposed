@@ -1,10 +1,9 @@
-package com.my.televip.obfuscate.resolves;
+package com.my.televip.Clients;
 
 import static com.my.televip.MainHook.lpparam;
 
 import com.my.televip.LoaderParameter;
 import com.my.televip.MainHook;
-import com.my.televip.loadClass;
 import com.my.televip.obfuscate.AutomationResolver;
 import com.my.televip.obfuscate.struct.ClassInfo;
 import com.my.televip.obfuscate.struct.FieldInfo;
@@ -17,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class NagramX {
+public class forkgramBeta {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -66,7 +65,7 @@ public class NagramX {
         classList.add(new ClassInfo("org.telegram.ui.Stories.StoriesController", "org.telegram.ui.Stories.StoriesController"));
         classList.add(new ClassInfo("org.telegram.tgnet.TLRPC$User", "org.telegram.tgnet.TLRPC$User"));
         classList.add(new ClassInfo("org.telegram.messenger.FileLoadOperation", "org.telegram.messenger.FileLoadOperation"));
-        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$13"));
+        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$15"));
         classList.add(new ClassInfo("org.telegram.messenger.DownloadController", "org.telegram.messenger.DownloadController"));
         classList.add(new ClassInfo("org.telegram.messenger.BaseController", "org.telegram.messenger.BaseController"));
         classList.add(new ClassInfo("org.telegram.messenger.UserObject", "org.telegram.messenger.UserObject"));
@@ -147,7 +146,7 @@ public class NagramX {
         methodList.add(new MethodInfo("SQLitePreparedStatement", "bindInteger", "bindInteger"));
         methodList.add(new MethodInfo("SQLitePreparedStatement", "step", "step"));
         methodList.add(new MethodInfo("LongSparseArray", "get", "get"));
-        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$6", "$r8$lambda$3LPsC4-gsx3N_r5bHJ7bVN0SW5Y"));
+        methodList.add(new MethodInfo("LaunchActivity", "lambda$onCreate$6", "lambda$onCreate$7"));
         methodList.add(new MethodInfo("BaseFragment", "getMessagesController", "getMessagesController"));
         methodList.add(new MethodInfo("MessagesController", "getChat", "getChat"));
         methodList.add(new MethodInfo("MessagesController", "getUser", "getUser"));
@@ -193,7 +192,7 @@ public class NagramX {
         methodList.add(new MethodInfo("ChatActivity$ChatActivityEnterViewDelegate", "needSendTyping", "needSendTyping"));
         methodList.add(new MethodInfo("StoriesController", "markStoryAsRead", "markStoryAsRead"));
         methodList.add(new MethodInfo("ChatActivity", "sendSecretMessageRead", "sendSecretMessageRead"));
-        methodList.add(new MethodInfo("ChatActivity", "sendSecretMediaDelete", "-$$Nest$msendSecretMediaDelete"));
+        methodList.add(new MethodInfo("ChatActivity", "sendSecretMediaDelete", "sendSecretMediaDelete"));
         methodList.add(new MethodInfo("SecretMediaViewer", "openMedia", "openMedia"));
         methodList.add(new MethodInfo("SecretMediaViewer", "closePhoto", "closePhoto"));
         methodList.add(new MethodInfo("UserConfig", "isPremium", "isPremium"));
@@ -206,12 +205,13 @@ public class NagramX {
         ParameterResolver.register("para2",new Class[]{int.class, int.class, CharSequence.class});
         ParameterResolver.register("para3",new Class[]{int.class});
         ParameterResolver.register("para4",new Class[]{int.class, CharSequence.class, int.class});
-       // ParameterResolver.register("para5",new Class[]{android.view.View.class,int.class, float.class, float.class});
+        ParameterResolver.register("para5",new Class[]{android.view.View.class,int.class, float.class, float.class});
         ParameterResolver.register("para6",new Class[]{boolean.class, boolean.class});
         ParameterResolver.register("para7",new Class[]{int.class, int.class, CharSequence.class});
         ParameterResolver.register("para8",new Class[]{boolean.class});
-        ParameterResolver.register("para9",new Class[]{long.class, java.util.ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
+        ParameterResolver.register("para9",new Class[]{long.class, ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
         ParameterResolver.register("para10",new Class[]{int.class, Object[].class});
+        ParameterResolver.register("para11",new Class[]{long.class, ArrayList.class, boolean.class, int.class, int.class});
     }
 
     public static class ClassResolver
@@ -341,20 +341,14 @@ public class NagramX {
             if (com.my.televip.loadClass.MessageObjectClass == null) {
                 com.my.televip.loadClass.MessageObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessageObject"), lpparam.classLoader);
             }
-            if (loadClass.ChatActivityClass == null) {
-                com.my.televip.loadClass.ChatActivityClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.ChatActivity"), lpparam.classLoader);
-            }
-            ParameterResolver.register("Parameter6", new Class[]{loadClass.ChatActivityClass,loadClass.MessageObjectClass});
+            ParameterResolver.register("Parameter6", new Class[]{com.my.televip.loadClass.MessageObjectClass});
         }
         public void loadParameter7() {
             if (com.my.televip.loadClass.MessageObjectClass == null) {
                 com.my.televip.loadClass.MessageObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessageObject"), lpparam.classLoader);
             }
-            Class<?> ChatActivityExternalSynthetic93Class = XposedHelpers.findClassIfExists("org.telegram.ui.ChatActivity$$ExternalSyntheticLambda93", lpparam.classLoader);
-            Class<?> ChatActivityExternalSynthetic252Class = XposedHelpers.findClassIfExists("org.telegram.ui.ChatActivity$$ExternalSyntheticLambda252", lpparam.classLoader);
-
-            Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
-            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, ChatActivityExternalSynthetic93Class, ChatActivityExternalSynthetic252Class});
+                Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
+                ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, Runnable.class, Runnable.class});
         }
         public void loadParameter8() {
                 Class<?> Userlass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$User"), lpparam.classLoader);
@@ -364,17 +358,13 @@ public class NagramX {
                 Class<?> conClass = XposedHelpers.findClassIfExists("android.content.Context", lpparam.classLoader);
                 ParameterResolver.register("Parameter9", new Class[]{conClass});
         }
-
-        public void loadParameter10() {
-            Class<?> LaunchActivityClass = XposedHelpers.findClassIfExists("org.telegram.ui.LaunchActivity", lpparam.classLoader);
-            ParameterResolver.register("Parameter10", new Class[]{LaunchActivityClass,android.view.View.class,int.class, float.class, float.class});
-        }
+        public void loadParameter10() {}
 
         public void loadParameter11() {
             Class<?> EncryptedChatClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$EncryptedChat"), lpparam.classLoader);
             Class<?> TLObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLObject"), lpparam.classLoader);
-            ParameterResolver.register("Parameter11", new Class[]{java.util.ArrayList.class,
-                    java.util.ArrayList.class,
+            ParameterResolver.register("Parameter11", new Class[]{ArrayList.class,
+                    ArrayList.class,
                     EncryptedChatClass, // الفئة المحددة
                     long.class,
                     boolean.class,
@@ -384,7 +374,7 @@ public class NagramX {
                     TLObjectClass,
                     int.class,
                     boolean.class,
-                    int.class,});
+                    int.class});
         }
     }
 }

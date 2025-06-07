@@ -1,4 +1,4 @@
-package com.my.televip.obfuscate.resolves;
+package com.my.televip.Clients;
 
 import static com.my.televip.MainHook.lpparam;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class TGConnect {
+public class TelegramWeb {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -211,6 +211,7 @@ public class TGConnect {
         ParameterResolver.register("para8",new Class[]{boolean.class});
         ParameterResolver.register("para9",new Class[]{long.class, java.util.ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
         ParameterResolver.register("para10",new Class[]{int.class, Object[].class});
+        ParameterResolver.register("para11",new Class[]{long.class, ArrayList.class, boolean.class, int.class, int.class});
     }
 
     public static class ClassResolver
@@ -347,7 +348,7 @@ public class TGConnect {
                 com.my.televip.loadClass.MessageObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.messenger.MessageObject"), lpparam.classLoader);
             }
             Class<?> photoViewerproviderClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.PhotoViewer$PhotoViewerProvider"), lpparam.classLoader);
-            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, Runnable.class, Runnable.class});
+            ParameterResolver.register("Parameter7", new Class[]{com.my.televip.loadClass.MessageObjectClass, photoViewerproviderClass, java.lang.Runnable.class, java.lang.Runnable.class});
         }
         public void loadParameter8() {
             Class<?> Userlass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLRPC$User"), lpparam.classLoader);
@@ -364,14 +365,16 @@ public class TGConnect {
             Class<?> TLObjectClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.tgnet.TLObject"), lpparam.classLoader);
             ParameterResolver.register("Parameter11", new Class[]{java.util.ArrayList.class,
                     java.util.ArrayList.class,
-                    EncryptedChatClass,
+                    EncryptedChatClass, // الفئة المحددة
                     long.class,
                     boolean.class,
                     int.class,
                     boolean.class,
                     long.class,
                     TLObjectClass,
-                    int.class});
+                    int.class,
+                    boolean.class,
+                    int.class,});
         }
     }
 }

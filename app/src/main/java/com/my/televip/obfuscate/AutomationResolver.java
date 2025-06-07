@@ -3,22 +3,23 @@ package com.my.televip.obfuscate;
 
 
 import com.my.televip.ClientChecker;
+import com.my.televip.Clients.Teegra;
 import com.my.televip.LoaderParameter;
 import com.my.televip.Utils;
-import com.my.televip.obfuscate.resolves.Cherrygram;
-import com.my.televip.obfuscate.resolves.Nagram;
-import com.my.televip.obfuscate.resolves.NagramX;
-import com.my.televip.obfuscate.resolves.Nicegram;
-import com.my.televip.obfuscate.resolves.TGConnect;
-import com.my.televip.obfuscate.resolves.Telegram;
-import com.my.televip.obfuscate.resolves.TelegramBeta;
-import com.my.televip.obfuscate.resolves.TelegramPlus;
-import com.my.televip.obfuscate.resolves.TelegramWeb;
-import com.my.televip.obfuscate.resolves.XPlus;
-import com.my.televip.obfuscate.resolves.forkgram;
-import com.my.televip.obfuscate.resolves.forkgramBeta;
-import com.my.televip.obfuscate.resolves.iMe;
-import com.my.televip.obfuscate.resolves.iMeWeb;
+import com.my.televip.Clients.Cherrygram;
+import com.my.televip.Clients.Nagram;
+import com.my.televip.Clients.NagramX;
+import com.my.televip.Clients.Nicegram;
+import com.my.televip.Clients.TGConnect;
+import com.my.televip.Clients.Telegram;
+import com.my.televip.Clients.TelegramBeta;
+import com.my.televip.Clients.TelegramPlus;
+import com.my.televip.Clients.TelegramWeb;
+import com.my.televip.Clients.XPlus;
+import com.my.televip.Clients.forkgram;
+import com.my.televip.Clients.forkgramBeta;
+import com.my.televip.Clients.iMe;
+import com.my.televip.Clients.iMeWeb;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,6 +87,10 @@ public class AutomationResolver {
          {
              if (forkgramBeta.ClassResolver.has(className))
                  return forkgramBeta.ClassResolver.resolve(className);
+         }else if (ClientChecker.check(ClientChecker.ClientType.Teegra, pkgName))
+         {
+             if (Teegra.ClassResolver.has(className))
+                 return Teegra.ClassResolver.resolve(className);
          }
 
         return className;
@@ -162,6 +167,11 @@ public class AutomationResolver {
        {
            if (forkgramBeta.ParameterResolver.has(name)) {
                return forkgramBeta.ParameterResolver.resolve(name);
+           }
+       }else if (ClientChecker.check(ClientChecker.ClientType.Teegra, pkgName))
+       {
+           if (Teegra.ParameterResolver.has(name)) {
+               return Teegra.ParameterResolver.resolve(name);
            }
        }
         return null;
@@ -337,11 +347,21 @@ public class AutomationResolver {
                 if (forkgramBeta.MethodResolver.has(className, name))
                     return forkgramBeta.MethodResolver.resolve(className, name);
             }
+        }else if (ClientChecker.check(ClientChecker.ClientType.Teegra, pkgName))
+        {
+            if (type == ResolverType.Field)
+            {
+                if (Teegra.FieldResolver.has(className, name))
+                    return Teegra.FieldResolver.resolve(className, name);
+            }
+            else if (type == ResolverType.Method)
+            {
+                if (Teegra.MethodResolver.has(className, name))
+                    return Teegra.MethodResolver.resolve(className, name);
+            }
         }
         return name;
     }
-
-
 
     public static String resolve(String className)
     {
@@ -363,6 +383,7 @@ public class AutomationResolver {
         result[classes.length] = hook;
         return result;
     }
+
 public static void loadParameter(String name){
         if (Loaders.isEmpty()) {
             Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.Telegram), new Telegram.loadParameter());
@@ -379,6 +400,8 @@ public static void loadParameter(String name){
             Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.iMeWeb), new iMeWeb.loadParameter());
             Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.forkgram), new forkgram.loadParameter());
             Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.forkgramBeta), new forkgramBeta.loadParameter());
+            Loaders.put(ClientChecker.getClientType(ClientChecker.ClientType.Teegra), new Teegra.loadParameter());
+
         }
         if (!Loaders.isEmpty()) {
             LoaderParameter loader = Loaders.get(Utils.pkgName);

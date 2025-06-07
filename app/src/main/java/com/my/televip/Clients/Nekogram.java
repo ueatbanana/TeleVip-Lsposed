@@ -1,4 +1,4 @@
-package com.my.televip.obfuscate.resolves;
+package com.my.televip.Clients;
 
 import java.util.ArrayList;
 import java.util.List;

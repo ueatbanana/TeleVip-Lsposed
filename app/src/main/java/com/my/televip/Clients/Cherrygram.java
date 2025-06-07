@@ -1,4 +1,4 @@
-package com.my.televip.obfuscate.resolves;
+package com.my.televip.Clients;
 
 import static com.my.televip.MainHook.lpparam;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedHelpers;
 
-public class TelegramBeta {
+public class Cherrygram {
     private static final List<ClassInfo> classList = new ArrayList<>();
     private static final List<FieldInfo> fieldList = new ArrayList<>();
     private static final List<MethodInfo> methodList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class TelegramBeta {
         classList.add(new ClassInfo("org.telegram.ui.Stories.StoriesController", "org.telegram.ui.Stories.StoriesController"));
         classList.add(new ClassInfo("org.telegram.tgnet.TLRPC$User", "org.telegram.tgnet.TLRPC$User"));
         classList.add(new ClassInfo("org.telegram.messenger.FileLoadOperation", "org.telegram.messenger.FileLoadOperation"));
-        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$12"));
+        classList.add(new ClassInfo("org.telegram.ui.ChatActivity$13", "org.telegram.ui.ChatActivity$13"));
         classList.add(new ClassInfo("org.telegram.messenger.DownloadController", "org.telegram.messenger.DownloadController"));
         classList.add(new ClassInfo("org.telegram.messenger.BaseController", "org.telegram.messenger.BaseController"));
         classList.add(new ClassInfo("org.telegram.messenger.UserObject", "org.telegram.messenger.UserObject"));
@@ -211,6 +211,7 @@ public class TelegramBeta {
         ParameterResolver.register("para8",new Class[]{boolean.class});
         ParameterResolver.register("para9",new Class[]{long.class, java.util.ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
         ParameterResolver.register("para10",new Class[]{int.class, Object[].class});
+        ParameterResolver.register("para11",new Class[]{long.class, ArrayList.class, boolean.class, int.class, int.class});
     }
 
     public static class ClassResolver
@@ -371,7 +372,9 @@ public class TelegramBeta {
                     boolean.class,
                     long.class,
                     TLObjectClass,
-                    int.class});
+                    int.class,
+                    boolean.class,
+                    int.class,});
         }
     }
 }

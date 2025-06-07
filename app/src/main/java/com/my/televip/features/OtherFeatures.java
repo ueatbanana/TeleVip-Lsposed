@@ -167,7 +167,7 @@ private static  Method getUserNameMethod;
                                                 }
                                             }
                                         }else {
-                                            int drawableResource = 0x7f0806c2;
+                                            int drawableResource = 0x7f0806d3;
                                                 if (chat != null) {
                                                     xSharedPreferences.SharedPre.edit().putString("id", String.valueOf(chatId)).apply();
                                                     //noinspection JavaReflectionInvocation
@@ -315,15 +315,11 @@ private static  Method getUserNameMethod;
 
                                             Object onDoneListener;
                                             Object onCnelListener;
-                                            if (lpparam.packageName.equals("com.tgconnect.android") || lpparam.packageName.equals("org.telegram.messenger.beta")) {
-                                                onDoneListener = (DialogInterface.OnClickListener) (dialog, which) -> onClickDialog.onClickToMessageId(editText,chatActivity);
-                                                onCnelListener = (DialogInterface.OnClickListener) (dialog, which) -> onClickDialog.onClickDismiss(dialog);
-
-                                            } else {
-                                                Class<?> listenerClass = XposedHelpers.findClass(
-                                                        AutomationResolver.resolve("org.telegram.ui.ActionBar.AlertDialog$OnButtonClickListener"),
-                                                        lpparam.classLoader
-                                                );
+                                            Class<?> listenerClass = XposedHelpers.findClassIfExists(
+                                                    AutomationResolver.resolve("org.telegram.ui.ActionBar.AlertDialog$OnButtonClickListener"),
+                                                    lpparam.classLoader
+                                            );
+                                            if (listenerClass != null) {
                                                 onDoneListener = Proxy.newProxyInstance(
                                                         lpparam.classLoader,
                                                         new Class[]{listenerClass},
@@ -342,15 +338,18 @@ private static  Method getUserNameMethod;
                                                         (proxy, method, args) -> {
                                                             if (method.getName().equals("onClick")) {
                                                                 Object object = args[0]; // هذا AlertDialog
-                                                                    if (object instanceof DialogInterface) {
-                                                                        DialogInterface dialog = (DialogInterface) object;
-                                                                        onClickDialog.onClickDismiss(dialog);
-                                                                    }
+                                                                if (object instanceof DialogInterface) {
+                                                                    DialogInterface dialog = (DialogInterface) object;
+                                                                    onClickDialog.onClickDismiss(dialog);
+                                                                }
                                                             }
                                                             //noinspection SuspiciousInvocationHandlerImplementation
                                                             return null;
                                                         }
                                                 );
+                                            } else {
+                                                onDoneListener = (DialogInterface.OnClickListener) (dialog, which) -> onClickDialog.onClickToMessageId(editText,chatActivity);
+                                                onCnelListener = (DialogInterface.OnClickListener) (dialog, which) -> onClickDialog.onClickDismiss(dialog);
                                             }
                                             XposedHelpers.callMethod(alertDialog, AutomationResolver.resolve("AlertDialog", "setPositiveButton", AutomationResolver.ResolverType.Method), Done, onDoneListener
                                             );

@@ -1,4 +1,4 @@
-package com.my.televip.obfuscate.resolves;
+package com.my.televip.Clients;
 
 import static com.my.televip.MainHook.lpparam;
 
@@ -211,6 +211,7 @@ public class Nicegram {
         ParameterResolver.register("para8",new Class[]{boolean.class});
         ParameterResolver.register("para9",new Class[]{long.class, java.util.ArrayList.class, boolean.class, boolean.class, int.class, int.class,});
         ParameterResolver.register("para10",new Class[]{int.class, Object[].class});
+        ParameterResolver.register("para11",new Class[]{long.class, ArrayList.class, boolean.class, int.class, int.class});
     }
 
     public static class ClassResolver
