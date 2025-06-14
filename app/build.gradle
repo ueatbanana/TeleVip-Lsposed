@@ -23,6 +23,11 @@ android {
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
+
+            // ✅ 新版 AGP 要在这里设置签名方案
+            enableV1Signing true
+            enableV2Signing true
+            enableV3Signing true
         }
     }
 
@@ -32,11 +37,6 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            // ✅ 启用多种签名方式以兼容更多设备
-            v1SigningEnabled true
-            v2SigningEnabled true
-            v3SigningEnabled true
         }
     }
 
@@ -44,6 +44,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     ndkVersion '21.4.7075529'
 }
 
@@ -56,4 +57,5 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 }
+
 
