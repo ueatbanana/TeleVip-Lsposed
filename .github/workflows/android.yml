@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Signed APK
 
 on:
   workflow_dispatch:
@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-    name: Build Release APK
     runs-on: ubuntu-latest
 
     steps:
@@ -20,15 +19,30 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: Grant execute permission for gradlew
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
+
+      - name: Grant permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Build Release APK
+      - name: Build signed APK
         run: ./gradlew :app:assembleRelease
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
-      - name: Upload APK
+      - name: Rename APK with build number
+        run: |
+          mkdir -p output
+          cp app/build/outputs/apk/release/app-release.apk output/TeleVip-${{ github.run_number }}.apk
+
+      - name: Show SHA256
+        run: sha256sum output/*.apk
+
+      - name: Upload signed APK
         uses: actions/upload-artifact@v4
         with:
-          name: TeleVip-Release-APK
-          path: app/build/outputs/apk/release/*.apk
-
+          name: TeleVip-${{ github.run_number }}.apk
+          path: output/*.apk
