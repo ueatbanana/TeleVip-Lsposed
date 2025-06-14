@@ -32,6 +32,11 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // ✅ 启用多种签名方式以兼容更多设备
+            v1SigningEnabled true
+            v2SigningEnabled true
+            v3SigningEnabled true
         }
     }
 
@@ -51,3 +56,4 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 }
+
